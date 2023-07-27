@@ -1,5 +1,9 @@
+const categoryControllers = require('./categoryControllers')
+const productControllers = require('./productControllers')
 const authControllers = require("./authControllers")
 
-module.exports= {
+module.exports={
+    categoryControllers,
+    productControllers,
     authControllers,
 }
