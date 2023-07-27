@@ -2,8 +2,10 @@ require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
-const db = require("./models")
-const {authRouters} = require("./routers")
+
+const { categoryRouters, productRouters, authRouters } = require('./routers')
+const db = require('./models')
+
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
@@ -64,6 +66,8 @@ app.get("*", (req, res) => {
   res.sendFile(join(__dirname, clientPath, "index.html"));
 });
 
+app.use('/api/categories', categoryRouters)
+app.use('/api/products', productRouters)
 //#endregion
 app.use("/auth", authRouters)
 app.listen(PORT, (err) => {
