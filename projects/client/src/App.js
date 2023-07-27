@@ -1,25 +1,22 @@
 import axios from "axios";
-import logo from "./logo.svg";
-import "./App.css";
 import { useEffect, useState } from "react";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { AdminDashboard } from "./pages/adminDashboard";
+import { Cashier } from "./components/dashboard/manageCashier/cashier";
+import { AdminHome } from "./components/dashboard/home/adminHome";
 
 function App() {
-  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/greetings`
-      );
-      setMessage(data?.message || "");
-    })();
-  }, []);
+  const router = createBrowserRouter([
+    { path: '/admin', element: <AdminDashboard />, children: [
+      { path: '', element: <AdminHome />},
+      { path: 'cashier', element: <Cashier />}
+    ]}
+  ])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {message}
-      </header>
+      <RouterProvider router={router}/>
     </div>
   );
 }
