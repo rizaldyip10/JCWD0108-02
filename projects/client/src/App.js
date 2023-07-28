@@ -1,5 +1,4 @@
 
-
 import Axios from "axios";
 import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -9,6 +8,11 @@ import { ForgotPassword } from "./pages/forgotPass";
 import { Footer } from "./pages/footer";
 import { ChangeProfilePicture } from "./pages/imgProfle";
 import { ResetPassword } from "./pages/resetPass";
+import { Homepage } from './pages/homepage';
+import { Navbar } from './components/landingPage/navbar';
+import { Detailpage } from './pages/detailpage';
+import { CreateProduct } from './components/admin/createProduct';
+import { DashboardProduct } from './components/admin/dashboardProduct';
 
 
 import { useEffect, useState } from "react";
@@ -27,6 +31,17 @@ const router = createBrowserRouter([
    { path: '/admin', element: <AdminDashboard />, children: [
       { path: '', element: <AdminHome />},
       { path: 'cashier', element: <Cashier />}
+   [
+      {path:"/",
+    element:<Navbar/>,
+    children:[
+      {path: "/",element:<Homepage/>},
+      {path: "detail",element:<Detailpage/>},
+      {path: "create",element:<CreateProduct/>},
+      {path: "dashboard",element:<DashboardProduct/>},
+    ]
+    }
+    ]
 ]);
 function App() {
   const token = localStorage.getItem("token");
