@@ -1,25 +1,44 @@
-import axios from "axios";
-import logo from "./logo.svg";
-import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Axios from "axios";
+import { useDispatch } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { setValue } from "./redux/cashierSlice";
+import { Login } from "./pages/login";
+import { ForgotPassword } from "./pages/forgotPass";
+import { Footer } from "./pages/footer";
+import { ChangeProfilePicture } from "./pages/imgProfle";
+import { ResetPassword } from "./pages/resetPass";
 
+const router = createBrowserRouter([
+  { path: "/login", element: <Login /> },
+  { path: "/forgotpass", element: <ForgotPassword /> },
+  { path: "resetpass", element: <ResetPassword /> },
+  { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
+  { path: "/footer", element: <Footer /> },
+]);
 function App() {
-  const [message, setMessage] = useState("");
-
+  const token = localStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const dispatch = useDispatch();
+  const keepLogin = async () => {
+    try {
+      const response = await Axios.get("http://localhost:5001/auth/keeplogin", {
+        headers,
+      });
+      dispatch(setValue(response.data));
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/greetings`
-      );
-      setMessage(data?.message || "");
-    })();
+    keepLogin();
   }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {message}
-      </header>
+      <RouterProvider router={router} />
     </div>
   );
 }
