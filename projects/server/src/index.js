@@ -33,6 +33,7 @@ app.get("/api/greetings", (req, res, next) => {
     message: "Hello, Student !",
   });
 });
+app.use("/api/auth", authRouters)
 
 app.use("/api/auth", authRouters)
 app.use('/api/categories', categoryRouters)
