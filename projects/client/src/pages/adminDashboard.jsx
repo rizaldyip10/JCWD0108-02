@@ -1,16 +1,31 @@
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react"
-import { SideBar } from "../components/dashboard/sidebar/sidebar"
-import { AdminHome } from "../components/dashboard/home/adminHome"
-import { MobileNav } from "../components/dashboard/sidebar/mobileNav"
-import { Outlet } from "react-router-dom"
-
-
+import { Box, Drawer, DrawerContent, useColorModeValue, useDisclosure } from '@chakra-ui/react';
+import { SidebarContent } from '../components/dashboard/sidebar/sidebarContent';
+import { MobileNav } from '../components/dashboard/sidebar/mobileNav'
+import { Outlet } from 'react-router-dom';
+  
 export const AdminDashboard = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+  
     return (
-        <Flex bgColor={useColorModeValue("green.50", "green.800")} id="admin">
-            <SideBar />
-            <MobileNav />
-            <Outlet />  
-        </Flex>
-    )
-}
+      <Box>
+        <SidebarContent onClose={onClose} display={{ base: 'none', md: 'block' }} />
+        <Drawer
+          isOpen={isOpen}
+          placement="left"
+          onClose={onClose}
+          returnFocusOnClose={false}
+          onOverlayClick={onClose}
+          size="full"
+        >
+          <DrawerContent>
+            <SidebarContent onClose={onClose} />
+          </DrawerContent>
+        </Drawer>
+        {/* mobilenav */}
+        <MobileNav onOpen={onOpen} />
+        <Box ml={{ base: 0, md: 60 }}>
+            <Outlet />
+        </Box>
+      </Box>
+    );
+  };
