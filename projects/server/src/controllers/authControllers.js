@@ -83,15 +83,15 @@ module.exports = {
       const username = result.username;
       const payload = { id: result.id };
       const token = jwt.sign(payload, "minpro3", { expiresIn: "1h" });
-      const data = await fs.readFileSync("./templateforgotpass.html", "utf-8");
-      const tempCompile = await handlebars.compile(data);
-      const tempResult = tempCompile({ username, token });
-      await transporter.sendMail({
-        from: "rifky.rizkita@gmail.com",
-        to: email,
-        subject: "Reset your password",
-        html: tempResult,
-      });
+      // const data = await fs.readFileSync("./templateforgotpass.html", "utf-8");
+      // const tempCompile = await handlebars.compile(data);
+      // const tempResult = tempCompile({ username, token });
+      // await transporter.sendMail({
+      //   from: "rifky.rizkita@gmail.com",
+      //   to: email,
+      //   subject: "Reset your password",
+      //   html: tempResult,
+      // });
       res.status(200).send({ message: "Check your email", token });
     } catch (error) {
       console.log(error);
