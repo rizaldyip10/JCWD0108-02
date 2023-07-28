@@ -21,16 +21,9 @@ module.exports = {
         password: hashPassword,
       });
       const payload = { id: result.id };
-      const token = jwt.sign(payload, "minpro4", { expiresIn: "1h" });
-      /*const data = await fs.readFileSync("./template.html", "utf-8");
-      const tempCompile = await handlebars.compile(data);
-      const tempResult = tempCompile({ username, token });
-      await transporter.sendMail({
-        from: "rifky.rizkita@gmail.com",
-        to: email,
-        subject: "Verify account",
-        html: tempResult,
-      });*/
+
+      const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1h" });
+
       res.status(200).send({
         status: true,
         message: "Add new cashier success",
@@ -51,7 +44,9 @@ module.exports = {
       const isValid = await bcrypt.compare(password, result.password)
       if (!isValid) throw { message: "Wrong password" };
       const payload = {id:result.id}
-      const token = jwt.sign(payload, "minpro3", { expiresIn: "1d" })
+
+      const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1d" })
+
       res.status(200).send({
         status: true,
         message: "Login success",
@@ -75,19 +70,24 @@ module.exports = {
       console.log(error);
     }
   },
-  forgetPassword: async (req, res) => {
+
+  forgotPassword: async (req, res) => {
+
     try {
       const { email } = req.body;
       const result = await cashier.findOne({where: { email: email }});
       if (result == null) throw { msg: "Account not found" };
       const username = result.username;
       const payload = { id: result.id };
-      const token = jwt.sign(payload, "minpro3", { expiresIn: "1h" });
+
+      const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1h" });
+
       const data = await fs.readFileSync("./templateforgotpass.html", "utf-8");
       const tempCompile = await handlebars.compile(data);
       const tempResult = tempCompile({ username, token });
       await transporter.sendMail({
-        from: "rifky.rizkita@gmail.com",
+        from: process.env.EMAIL_TRANSPORTER,
+
         to: email,
         subject: "Reset your password",
         html: tempResult,
@@ -136,4 +136,29 @@ module.exports = {
       console.log(error);
     }
   },
+
+  getCashiers: async (req,res) => {
+    try {
+      const page = +req.query.page || 1;
+      const limit = +req.query.limit || 10;
+      const search = req.query.search;
+      const sort= req.query.sort || "ASC"
+      const condition = {isAdmin:false, isDeleted:false, isBanned:false}
+      if (search) condition['username'] = { [Op.like]: `%${search}%` };
+      const offset = (page - 1) * limit
+      const total = await cashier.count({where: condition})
+      const result = await cashier.findAll({attributes:{exclude: ["password"]} ,where: condition, limit, offset:offset, order : [["username", sort]]})
+      res.status(200).send({
+        totalpage: Math.ceil(total / limit),
+        currentpage: page,
+        total_slave: total,
+        result,
+        status: true,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  }
+
 };
