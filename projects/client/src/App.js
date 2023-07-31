@@ -31,6 +31,7 @@ const router = createBrowserRouter([
    { path: '/admin', element: <AdminDashboard />, children: [
       { path: '', element: <AdminHome />},
       { path: 'cashier', element: <Cashier />}
+   ]}
    [
       {path:"/",
     element:<Navbar/>,
@@ -42,7 +43,8 @@ const router = createBrowserRouter([
     ]
     }
     ]
-]);
+])
+  
 function App() {
   const token = localStorage.getItem("token");
   const headers = {
