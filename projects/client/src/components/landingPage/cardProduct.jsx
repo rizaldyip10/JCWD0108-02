@@ -47,9 +47,12 @@ export  const Product = () => {
     setCurrentPage(1);
   };
 
+  const showCounterComponent = products && products.length > 0
+
   return (
     <>
-      <Flex direction={{ base: 'column', sm: 'row', md: 'row', lg: 'row' }} justifyContent={'center'} flexWrap={'wrap'} gap={5}>
+      <Flex direction={{ base: 'column', sm: 'row', md: 'row', lg: 'row' }} 
+      justifyContent={'center'} flexWrap={'wrap'} gap={5}>
         {products?.map((item) => (
           <Box
             key={item.id}
@@ -90,7 +93,7 @@ export  const Product = () => {
               <Heading fontSize={'sm'} fontFamily={'body'} fontWeight={500} color={'green'}>
                 {item.productPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
               </Heading>
-              <Counter />
+              {showCounterComponent && <Counter id={item.id} />}
             </Stack>
           </Box>
         ))}

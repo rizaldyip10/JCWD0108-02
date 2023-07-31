@@ -1,9 +1,11 @@
 import { Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
+import Axios from "axios";
 import { useState } from "react";
 
-export const Counter = () => {
+export const Counter = ({ id }) => {
     const [quantity, setQuantity] = useState(1);
     const [isBuying, setIsBuying] = useState(false);
+    const TOKEN = localStorage.getItem("token")
 
     const handleBuyClick = () => {
      setIsBuying(true);
@@ -17,11 +19,19 @@ export const Counter = () => {
     setQuantity((prevQuantity) => Math.max(0, prevQuantity - 1));
   };
 
-  const handleConfirmClick = () => {
-    if (quantity === 0) {
-        setIsBuying(false)
-      setQuantity(1);
-    } else {
+  const handleConfirmClick = async () => {
+    try {
+      const response = await Axios.post(`http://localhost:8000/api/carts`, {
+        ProductId: id,
+        totalItems: quantity
+      }, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`
+        }
+      })
+      window.location.reload()
+    } catch (error) {
+      console.log(error);
     }
   };
     return(

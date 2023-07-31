@@ -35,7 +35,6 @@ app.get("/api/greetings", (req, res, next) => {
   });
 });
 
-
 app.use("/api/auth", authRouters)
 app.use('/api/categories', categoryRouters)
 app.use('/api/products', productRouters)
@@ -78,7 +77,7 @@ app.listen(PORT, (err) => {
   if (err) {
     console.log(`ERROR: ${err}`);
   } else {
-    // db.sequelize.sync({alter:true})
+    // db.sequelize.sync({alter: true})
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });

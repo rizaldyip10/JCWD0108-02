@@ -87,7 +87,6 @@ module.exports = {
         subject: "Reset your password",
         html: tempResult,
       });
-      
       res.status(200).send({ message: "Check your email", token });
     } catch (error) {
       console.log(error);
