@@ -1,4 +1,5 @@
-require("dotenv/config");
+require("dotenv").config()
+
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
@@ -6,21 +7,22 @@ const { join } = require("path");
 
 const { categoryRouters, productRouters, authRouters } = require('./routers')
 const db = require('./models')
+console.log(process.env.PASS_TRANSPORTER);
 
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
   cors({
-    origin: [
+    /*origin: [
       process.env.WHITELISTED_DOMAIN &&
         process.env.WHITELISTED_DOMAIN.split(","),
-    ],
+    ],*/
   })
 );
 
 app.use(express.json());
-
+app.use(express.static("./public"))
 //#region API ROUTES
 
 // ===========================

@@ -6,7 +6,7 @@ module.exports= {
           if (!token) throw { message: "Token is empty" };
           token = token.split(" ")[1];
 
-          let verifiedUser = jwt.verify(token, process.env.KEY_JWT);
+          let verifiedUser = jwt.verify(token, "minpro3");
 
           console.log(verifiedUser);
           req.user = verifiedUser;

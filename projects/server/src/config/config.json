@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": null,
-    "database": "database_development",
+    "password": "quoderat01",
+    "database": "minpro3",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
