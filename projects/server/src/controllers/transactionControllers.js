@@ -1,6 +1,5 @@
 const { Cashier, Category, Cart, Product, sequelize, Transaction, cartDetail, transactionDetail } = require("../models")
-const { Sequelize } = require("sequelize")
-const transaction = require("../models/transaction")
+const { Sequelize, Op } = require("sequelize")
 
 module.exports = {
     getCartItem: async (req, res) => {
@@ -17,7 +16,7 @@ module.exports = {
                     'totalItems',
                     'CartId',
                     'ProductId',
-                    [Sequelize.literal("Product.productPrice * cartDetail.totalItems"), "totalPrice"],
+                    'totalPrice'
                 ],
                 where: {
                     CartId: cashierCart.id
@@ -48,7 +47,7 @@ module.exports = {
                 ProductId,
                 totalItems,
                 CartId: cashierCart.id,
-                amount: totalItems * product.productPrice
+                totalPrice: totalItems * product.productPrice
             })
 
             res.status(200).send(result)
@@ -89,10 +88,11 @@ module.exports = {
                 await transactionDetail.create({
                     ProductId: v.ProductId,
                     TransactionId: createTrans.id,
-                    totalItems: v.totalItems
+                    totalItems: v.totalItems,
+                    totalPrice: v.totalPrice
                 })
             })
-            const removeCart = await cartDetail.destroy({ where: { CartId: cashierCart.id }})
+            await cartDetail.destroy({ where: { CartId: cashierCart.id }})
 
             res.status(200).send({
                 message: "Transaction success"
@@ -102,61 +102,12 @@ module.exports = {
             res.status(400).send(error)
         }
     },
-    getAllTrans: async (req, res) => {
-        try {
-            const page = +req.query.page || 1;
-            const limit = +req.query.limit || 10;
-            const offset = (page - 1) * limit;
-            const search = req.query.search;
-            const catId = +req.query.catId;
-            const transId = +req.query.transId
-            const sort = req.query.sort || 'DESC';
-            const sortBy = req.query.sortBy || 'createdAt';
-            const dateStart = req.query.dateStart || new Date()
-            const dateEnd = req.query.dateStart || new Date()
-            const condition = {}
-            
-            if (search) {
-                condition[Op.or] = [{ productName: { [Op.like]: `%${search}%` } }];
-            }
-            if (catId) {
-                condition.CategoryId = catId;
-            }
-            if (transId) {
-                condition.TransactionId = transId
-            }
-
-            const result = await transactionDetail.findAll({
-                attributes: [
-                    'id',
-                    'totalItems',
-                    'createdAt',
-                    'TransactionId',
-                    'ProductId',
-                    [Sequelize.literal("transactionDetail.totalItems * Product.productPrice"), "totalPrice"]
-                ],
-                limit,
-                offset,
-                include: [
-                    { model: Product, attributes: ['productImage', 'productName', 'productPrice']},
-                    { model: Transaction, attributes: ['id'], include: 
-                        { model: Cashier, attributes: ['username', 'firstName', 'lastName'] }
-                    }
-                ],
-                order: [
-                    [sortBy, sort]
-                ],
-                where: condition
-            })
-
-            res.status(200).send(result)
-        } catch (error) {
-            res.status(400).send(error)
-        }
-    },
     updateItem: async (req, res) => {
         try {
-            const result = await cartDetail.update({ totalItems: req.body.totalItems}, {
+            const result = await cartDetail.update({
+                totalItems: req.body.totalItems,
+                 
+            }, {
                 where: {
                     id: req.params.id
                 }

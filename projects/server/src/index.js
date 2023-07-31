@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 
-const { categoryRouters, productRouters, authRouters, transactionRouters } = require('./routers')
+const { categoryRouters, productRouters, authRouters, transactionRouters, reportRouters } = require('./routers')
 const db = require('./models');
 
 const PORT = process.env.PORT || 8000;
@@ -38,6 +38,7 @@ app.use("/api/auth", authRouters)
 app.use('/api/categories', categoryRouters)
 app.use('/api/products', productRouters)
 app.use('/api/carts', transactionRouters)
+app.use('/api/reports', reportRouters)
 
 // ===========================
 
