@@ -174,5 +174,6 @@ export const CreateProduct = ({ onCloseModal }) => {
       )}
     </Box>
   </Center>
+
   );
 };
