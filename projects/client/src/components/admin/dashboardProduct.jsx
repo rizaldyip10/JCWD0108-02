@@ -1,129 +1,178 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Box,
   Button,
-  Center,
+  Input,
+  FormControl,
+  FormLabel,
+  Textarea,
+  Box,
   Heading,
-  Text,
-  Stack,
-  Image,
-  Flex,
-  HStack,
-} from '@chakra-ui/react';
+  Select,
+  Center,
+  Alert,
+  AlertIcon
+} from "@chakra-ui/react";
 import Axios from 'axios';
-import {Deactivate} from './deactivateProduct'; 
-import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { useParams } from 'react-router-dom';
+import { Form } from 'react-router-dom';
+import * as Yup from'yup'
+import { Field, Formik } from 'formik';
 
-export const DashboardProduct = () => {
-  const { id } = useParams();
-  const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [totalPage, setTotalPage] = useState(1);
+const productSchema = Yup.object().shape({
+  productName: Yup.string().required('Product Name is required'),
+  productPrice: Yup.number()
+    .typeError('Product Price must be a number')
+    .required('Product Price is required')
+    .min(0, 'Product Price must be greater than or equal to 0'),
+  productDescription: Yup.string().required('Product Description is required'),
+  CategoryId: Yup.string().required('Please select a category'),
+  // productImage:Yup.mixed().required("Product Image is required")
+});
+export const CreateProduct = ({ onCloseModal }) => {
+  const [productName, setProductName] = useState('');
+  const [productPrice, setProductPrice] = useState('');
+  const [productDescription, setProductDescription] = useState('');
+  const [productImage, setProductImage] = useState(null);
+  const [CategoryId, setCategory] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [categories, setCategories] = useState([]);
 
-  const getProducts = async (page, limit) => {
+  const handleChange = (e) => setCategory(e.target.value);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('productName', productName);
+    formData.append('productPrice', productPrice);
+    formData.append('productDescription', productDescription);
+    formData.append('CategoryId', CategoryId);
+    if (productImage) formData.append('productImage', productImage);
+
     try {
-      const response = await Axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&=${id}`);
-      const { result, totalPage: totalPages } = response.data;
-      setProducts(result);
-      setTotalPage(totalPages);
+      const response = await Axios.post('http://localhost:8000/api/products', formData);
+      setSuccessMessage(response.data);
+      setErrorMessage('');
+    } catch (error) {
+      setErrorMessage('Failed to add product');
+      setSuccessMessage('');
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const response = await Axios.get('http://localhost:8000/api/categories');
+      setCategories(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getProducts(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage]);
+    getCategories();
+  }, []);
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPage) {
-      setCurrentPage(newPage);
-    }
-  };
-
-  const handleItemsPerPageChange = (newLimit) => {
-    setItemsPerPage(newLimit);
-    setCurrentPage(1);
-  };
-console.log(products);
   return (
-    <>
-      <Flex direction={{ base: 'column', sm: 'row', md: 'row', lg: 'row' }} justifyContent={'center'} flexWrap={'wrap'} gap={5}>
-        {products?.map((item) => (
+    <Center >
+    <Box>
+      <Heading size="lg">Add Product</Heading>
+      <Formik
+        initialValues={{
+          productName: '',
+          productPrice: '',
+          productDescription: '',
+          CategoryId: '',
+          // productImage:''
+        }}
+        validationSchema={productSchema}
+        onSubmit={async (values) => {
+          const formData = new FormData();
+          formData.append('productName', values.productName);
+          formData.append('productPrice', values.productPrice);
+          formData.append('productDescription', values.productDescription);
+          formData.append('CategoryId', values.CategoryId);
+          if (productImage) formData.append('productImage', productImage);
 
-          <Box
-            key={item.id}
-            mt={5}
-            role={'group'}
-            p={4}
-            maxW={'200px'}
-            w={'full'}
-            bg={'white'}
-            boxShadow={'2xl'}
-            rounded={'lg'}
-            justifyContent={'center'}
-            transition={'transform .2s'}
-            zIndex={1}
-            _hover={{
-              transform: 'scale(1.05)',
-            }}
-          >
-            <Box rounded={'lg'} height={'140px'} overflow="hidden">
-              <Image
-                rounded={'lg'}
-                height={140}
-                width={140}
-                mx={'auto'}
-                objectFit={'cover'}
-                src={`http://localhost:8000/${item?.productImage}`}
-                alt={'#'}
-                transition="transform 0.2s ease-in-out" 
-                _groupHover={{
-                  transform: 'scale(1.1)', 
-                }}
-              />
+          try {
+            const response = await Axios.post('http://localhost:8000/api/products', formData);
+            setSuccessMessage(response.data);
+            setErrorMessage('');
+          } catch (error) {
+            setErrorMessage('Failed to add product');
+            setSuccessMessage('');
+          }
+        }}
+      >
+        {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
+          <Form onSubmit={handleSubmit} style={{ display: 'flex' }}>
+            <Box flex="1" mr={8}>
+              <FormControl id="productName" mt={4} isRequired>
+                <FormLabel>Product Name</FormLabel>
+                <Input type="text" value={values.productName} onChange={handleChange} onBlur={handleBlur} />
+                {touched.productName && errors.productName && (
+                  <Box color="red.500">{errors.productName}</Box>
+                )}
+              </FormControl>
+
+              <FormControl id="productPrice" mt={4} isRequired>
+                <FormLabel>Product Price</FormLabel>
+                <Input type="number" value={values.productPrice} onChange={handleChange} onBlur={handleBlur} />
+                {touched.productPrice && errors.productPrice && (
+                  <Box color="red.500">{errors.productPrice}</Box>
+                )}
+              </FormControl>
+
+              <FormControl id="productDescription" mt={4} isRequired>
+                <FormLabel>Product Description</FormLabel>
+                <Textarea value={values.productDescription} onChange={handleChange} onBlur={handleBlur} />
+                {touched.productDescription && errors.productDescription && (
+                  <Box color="red.500">{errors.productDescription}</Box>
+                )}
+              </FormControl>
             </Box>
-            <Stack pt={4} align={'center'}>
-              <Heading fontSize={'sm'} fontFamily={'body'} fontWeight={500} mt={2}>
-                {item.productName}
-              </Heading>
-              <HStack>
-                <Button >Edit</Button>
-                  <Deactivate
-                    blogId={item?.id}
-                    isDeleted={item?.isDeleted}
-                  />
-              </HStack>
-            </Stack>
-          </Box>
-        ))}
-      </Flex>
-      <Box mt={5} display="flex" justifyContent="center" alignItems="center">
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          isDisabled={currentPage === 1}
-          mr={2}
-          size="sm"
-          bg={"green"}
-        >
-          <ArrowBackIcon color={"white"}></ArrowBackIcon>
-        </Button>
-        <Text fontSize="sm" mr={2}>
-          Page {currentPage} of {totalPage}
-        </Text>
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          isDisabled={currentPage >= totalPage}
-          ml={2}
-          size="sm"
-          bg={"green"}
-        >
-          <ArrowForwardIcon color={"white"}></ArrowForwardIcon>
-        </Button>
-      </Box>
-    </>
+
+            <Box flex="1">
+              <FormControl id="CategoryId" mt={4} isRequired>
+                <FormLabel>Category</FormLabel>
+                <Field as={Select} value={values.CategoryId} onChange={handleChange} placeholder="Select category">
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>{category.Category}</option>
+                  ))}
+                </Field>
+                {touched.CategoryId && errors.CategoryId && (
+                  <Box color="red.500">{errors.CategoryId}</Box>
+                )}
+              </FormControl>
+
+              <FormControl id="productImage" mt={4} isRequired>
+                <FormLabel>Product Image</FormLabel>
+                <Input type="file" onChange={(e) => setProductImage(e.target.files[0])} />
+              {touched.productImage && errors.productImage && (
+                  <Box color="red.500">{errors.productImage}</Box>
+                )}
+              </FormControl>
+
+              <Button bg={"green"} color={'white'} _hover={{ bg: 'white', color: 'green', boxShadow: 'md' }} mt={6} type="submit">
+                Add Product
+              </Button>
+            </Box>
+          </Form>
+        )}
+      </Formik>
+
+      {successMessage && (
+        <Alert status="success" mt={4}>
+          <AlertIcon />
+          {successMessage}
+        </Alert>
+      )}
+
+      {errorMessage && (
+        <Alert status="error" mt={4}>
+          <AlertIcon />
+          {errorMessage}
+        </Alert>
+      )}
+    </Box>
+  </Center>
   );
 };
-

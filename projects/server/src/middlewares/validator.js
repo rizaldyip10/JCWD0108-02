@@ -49,9 +49,16 @@ module.exports = {
   },
   checkLogin: async (req, res, next) => {
     try {
-      await body("username")
-        .notEmpty()
-        .withMessage("Username must be empty")
+      await body("username").optional({ nullable: true }).run(req);
+      await body("email")
+        .isEmail()
+        .withMessage("Invalid email")
+        .optional({ nullable: true })
+        .run(req);
+        await body("phone")
+        .isMobilePhone()
+        .withMessage("Invalid phone number")
+        .optional({ nullable: true })
         .run(req);
       await body("password")
         .notEmpty()

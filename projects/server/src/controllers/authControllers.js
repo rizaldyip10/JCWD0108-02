@@ -37,16 +37,16 @@ module.exports = {
   },
   login: async (req, res) => {
     try {
-      const{username, password} = req.body
-      const result = await cashier.findOne({ where: {username}});
-      console.log(result);
-      if (result == null) throw{message:"Cashier not found"}
+      const username = req.body.username || "";
+      const email = req.body.email || "";
+      const phone = req.body.phone  || ""
+      const password = req.body.password;
+      const result = await cashier.findOne({ where: {[Op.or]:[{username},{email},{phone}]}});
+      if (result == null) throw{message:"Account not found"}
       const isValid = await bcrypt.compare(password, result.password)
       if (!isValid) throw { message: "Wrong password" };
       const payload = {id:result.id}
-
-      const token = jwt.sign(payload, "minpro3", { expiresIn: "1d" })
-
+      const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1d" })
       res.status(200).send({
         status: true,
         message: "Login success",
@@ -70,26 +70,23 @@ module.exports = {
       console.log(error);
     }
   },
-
   forgotPassword: async (req, res) => {
-
     try {
       const { email } = req.body;
       const result = await cashier.findOne({where: { email: email }});
       if (result == null) throw { msg: "Account not found" };
       const username = result.username;
       const payload = { id: result.id };
-      const token = jwt.sign(payload, "minpro3", { expiresIn: "1h" });
-      // const data = await fs.readFileSync("./templateforgotpass.html", "utf-8");
-      // const tempCompile = await handlebars.compile(data);
-      // const tempResult = tempCompile({ username, token });
-      // await transporter.sendMail({
-      //   from: process.env.EMAIL_TRANSPORTER,
-      //   to: email,
-      //   subject: "Reset your password",
-      //   html: tempResult,
-      // });
-      
+      const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1h" });
+      const data = await fs.readFileSync("./src/templateforgotpass.html", "utf-8");
+      const tempCompile = await handlebars.compile(data);
+      const tempResult = tempCompile({ username, token });
+      await transporter.sendMail({
+        from: process.env.EMAIL_TRANSPORTER,
+        to: email,
+        subject: "Reset your password",
+        html: tempResult,
+      });
       res.status(200).send({ message: "Check your email", token });
     } catch (error) {
       console.log(error);
@@ -98,7 +95,7 @@ module.exports = {
   },
   resetPassword: async (req, res) => {
     try {
-      const { password, confirmPassword } = req.body;
+      const { password } = req.body;
       console.log(req.user.id);
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(password, salt);
