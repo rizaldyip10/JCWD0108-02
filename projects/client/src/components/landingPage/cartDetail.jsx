@@ -39,16 +39,16 @@ export const CartCard = () => {
         }
     }
 
-    const updateItem = async (id, updatedTotal) => {
+    const updateItem = async (id, updatedTotal, updatedPrice) => {
         try {
             const response = await Axios.patch(`http://localhost:8000/api/carts/${id}`, {
-                totalItems: updatedTotal
+                totalItems: updatedTotal,
+                totalPrice: updatedPrice
             }, {
                 headers: {
                     Authorization: `Bearer ${TOKEN}`
                 }
             })
-            console.log(response);
         } catch (error) {
             console.log(error);
         }
@@ -60,6 +60,16 @@ export const CartCard = () => {
           currency: "IDR",
         }).format(amount);
       };
+
+    const calculateItemPrice = () => {
+        if (items) {
+            const price = items.map(item => item.Product.productPrice * item.totalItems, 0)
+            return price
+        }
+        return 0
+    }
+
+    const price = calculateItemPrice()
     
     const increaseQuantity = (itemId) => {
         setItems((prevItems) =>
@@ -69,7 +79,7 @@ export const CartCard = () => {
         );
         const item = items.find((item) => item.id === itemId);
         if (item) {
-            updateItem(itemId, item.totalItems + 1);
+            updateItem(itemId, item.totalItems + 1, price);
         }
       };
     
@@ -83,7 +93,7 @@ export const CartCard = () => {
         );
         const item = items.find((item) => item.id === itemId);
         if (item) {
-            updateItem(itemId, item.totalItems - 1);
+            updateItem(itemId, item.totalItems - 1, price);
         }
       };
     
@@ -96,15 +106,12 @@ export const CartCard = () => {
         return 0;
     };
     const totalPrice = calculateTotalPrice()
-    console.log(totalPrice);
 
     useEffect(() => {
         getCart()
     }, [reload])
 
-    const showPaymentComponent = items && items.length > 0;
-
-    return items ? (
+    return items?.length > 0 ? (
         <Box bg="white" w="400px" h="100%" p="20px" ml="20px"
         borderRadius="15px" boxShadow="1px 1px 3px black" mt="10px">
             <Heading fontSize="24px">Order Detail</Heading>
@@ -146,7 +153,7 @@ export const CartCard = () => {
                         )
                     })}
             <Divider mt="15px"/>
-            {showPaymentComponent && <Payment data={items} totalPrice={totalPrice} />}
+            <Payment totalPrice={totalPrice} reload={reload} setReload={setReload} />
         </Box>
     ) : (
         <Flex bg="white" w="400px" p="20px" ml="20px" position="fixed" right="20"

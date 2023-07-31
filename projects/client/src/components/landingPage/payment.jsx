@@ -1,11 +1,10 @@
-import { Box, Divider, Flex, Heading, IconButton, Text, useDisclosure } from "@chakra-ui/react"
+import { Box, Divider, Flex, Heading, IconButton, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { BsCash, BsFillCreditCardFill, BsQrCode } from "react-icons/bs"
 
-
-export const Payment = ({ data, totalPrice }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+export const Payment = ({ totalPrice, reload, setReload }) => {
+    const toast = useToast()
     const TOKEN = localStorage.getItem("token")
     const formatIDR = (amount) => {
         return new Intl.NumberFormat("id-ID", {
@@ -22,7 +21,15 @@ export const Payment = ({ data, totalPrice }) => {
                     Authorization: `Bearer ${TOKEN}`
                 }
             })
-            console.log(response);
+            toast({
+                title: "Success",
+                description: "Transaction completed!",
+                status: 'success',
+                duration: 1500,
+                isClosable: true,
+                position: "top"
+              })
+              setReload(!reload)
         } catch (error) {
             console.log(error);
         }
