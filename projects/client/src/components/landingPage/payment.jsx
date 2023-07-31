@@ -3,7 +3,6 @@ import Axios from "axios";
 import { useEffect, useState } from "react";
 import { BsCash, BsFillCreditCardFill, BsQrCode } from "react-icons/bs"
 
-
 export const Payment = ({ totalPrice, reload, setReload }) => {
     const toast = useToast()
     const TOKEN = localStorage.getItem("token")

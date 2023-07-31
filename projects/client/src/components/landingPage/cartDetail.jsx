@@ -106,7 +106,6 @@ export const CartCard = () => {
         return 0;
     };
     const totalPrice = calculateTotalPrice()
-    console.log(items);
 
     useEffect(() => {
         getCart()

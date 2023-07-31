@@ -93,7 +93,6 @@ module.exports = {
                 })
             })
             await cartDetail.destroy({ where: { CartId: cashierCart.id }})
-
             res.status(200).send({
                 message: "Transaction success"
             })
