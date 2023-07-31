@@ -17,8 +17,6 @@ const router = createBrowserRouter([
   { path: "/forgotpass", element: <ForgotPassword /> },
   { path: "/resetpass/:token", element: <ResetPassword /> },
   { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
-  { path: "/resetpass/:token", element: <ResetPassword /> },
-
   {
     path: "/admin",
     element: <AdminDashboard />,
