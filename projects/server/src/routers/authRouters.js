@@ -4,6 +4,7 @@ const {verifyToken} = require("../middlewares/auth")
 const { checkAddCashier, checkLogin, checkForgetPassword, checkResetPassword } = require("../middlewares/validator")
 const{multerUpload} = require("../middlewares/multer")
 
+router.get("/", authControllers.getCashiers)
 router.post("/", verifyToken,checkAddCashier, authControllers.addCashier)
 router.post("/login", checkLogin,authControllers.login)
 router.get("/login",verifyToken,authControllers.keepLogin)

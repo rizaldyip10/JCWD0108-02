@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import {
   Flex,
   Box,
@@ -13,12 +13,15 @@ import {
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import Axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
+
 export const ForgotPassword = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  
   const handleSubmit = async (data) => {
     try {
       const response = await Axios.put(
-        "http://localhost:8000/auth/forgotPass",
+        "http://localhost:8000/api/auth/forgotPass",
         data
       );
       console.log(response);
@@ -40,6 +43,7 @@ export const ForgotPassword = () => {
     <Formik
       initialValues={{
         email: "",
+        recaptcha: "",
       }}
       validationSchema={forgotSchema}
       onSubmit={(value, action) => {
@@ -100,13 +104,24 @@ export const ForgotPassword = () => {
                   component="div"
                 />
                 <Stack spacing={6}>
+                  <Box mt={4} w="100%" mx="auto">
+                      <Flex justify={"center"} align={"center"}>
+                        <ReCAPTCHA
+                          sitekey={"6Lc05mgnAAAAAAwI0woSJin3hN9d-FymlUvqssLo"}
+                          onChange={(value) =>
+                            props.setFieldValue("recaptcha", value)
+                          }
+                        />
+                      </Flex>
+                    </Box>
                   <Button
                     bg={"green.400"}
                     color={"white"}
                     _hover={{
                       bg: "green.500",
                     }}
-                    isDisabled={!props.dirty}
+                    isLoading={props.isSubmitting}
+                    isDisabled={!props.dirty || !props.isValid || !props.values.recaptcha} 
                     type="submit"
                   >
                     Request Reset
