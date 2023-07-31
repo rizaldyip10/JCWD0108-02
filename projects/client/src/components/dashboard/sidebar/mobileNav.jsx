@@ -1,25 +1,69 @@
-import { Avatar, Button, Flex, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react"
-import { NavItem } from "./navItems"
-import { AiOutlineHome, AiOutlineShoppingCart, AiOutlineUser, AiOutlineTransaction } from 'react-icons/ai'
+import { Avatar, Box, Flex, HStack, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, VStack, useColorModeValue } from "@chakra-ui/react";
+import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 
-
-export const MobileNav = () => {
+export const MobileNav = ({ onOpen, ...rest }) => {
     return (
-        <Flex display={{ base: 'flex', md: 'flex', lg: 'none'}} bottom="0" bgColor="green"
-        h="65px" w="100vw" position="fixed" justifyContent="space-evenly" color="white">
-            <NavItem icon={AiOutlineHome} />
-            <NavItem icon={AiOutlineShoppingCart} />
-            <NavItem icon={AiOutlineUser} />
-            <NavItem icon={AiOutlineTransaction} />
-            <Menu placement='top'>
-                <MenuButton>
-                    <Avatar size="sm" bg="green" />
-                </MenuButton>
-                <MenuList mb={10}>
-                    <MenuItem>Settings</MenuItem>
-                    <MenuItem color="red">Sign Out</MenuItem>
-                </MenuList>
+      <Flex
+        ml={{ base: 0, md: 60 }}
+        px={{ base: 4, md: 4 }}
+        height="20"
+        alignItems="center"
+        bg={useColorModeValue('white', 'gray.900')}
+        borderBottomWidth="1px"
+        borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
+        justifyContent={{ base: 'space-between', md: 'flex-end' }}
+        {...rest}
+      >
+        <IconButton
+          display={{ base: 'flex', md: 'none' }}
+          onClick={onOpen}
+          variant="outline"
+          aria-label="open menu"
+          icon={<FiMenu />}
+        />
+  
+        <Text
+          display={{ base: 'flex', md: 'none' }}
+          fontSize="2xl"
+          fontFamily="monospace"
+          fontWeight="bold"
+        >
+          Logo
+        </Text>
+  
+        <HStack spacing={{ base: '0', md: '6' }}>
+          <Flex alignItems={'center'}>
+            <Menu>
+              <MenuButton py={2} transition="all 0.3s" _focus={{ boxShadow: 'none' }}>
+                <HStack>
+                  <Avatar size={'sm'} bg="green" />
+                  <VStack
+                    display={{ base: 'none', md: 'flex' }}
+                    alignItems="flex-start"
+                    spacing="1px"
+                    ml="2"
+                  >
+                    <Text fontSize="sm" color="green">Justina Clark</Text>
+                    <Text fontSize="xs" color="green.600">
+                      Admin
+                    </Text>
+                  </VStack>
+                  <Box display={{ base: 'none', md: 'flex' }}>
+                    <FiChevronDown />
+                  </Box>
+                </HStack>
+              </MenuButton>
+              <MenuList
+                bg={useColorModeValue('white', 'green.900')}
+                borderColor={useColorModeValue('green.200', 'green.700')}
+              >
+                <MenuItem color="green">Profile</MenuItem>
+                <MenuDivider />
+                <MenuItem color="red">Sign out</MenuItem>
+              </MenuList>
             </Menu>
-        </Flex>
-    )
-}
+          </Flex>
+        </HStack>
+      </Flex>
+    );
+  };

@@ -4,12 +4,8 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 
-
-const { categoryRouters, productRouters, authRouters } = require('./routers')
-const db = require('./models')
-console.log(process.env.PASS_TRANSPORTER);
-
-
+const { categoryRouters, productRouters, authRouters, transactionRouters } = require('./routers')
+const db = require('./models');
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -38,7 +34,12 @@ app.get("/api/greetings", (req, res, next) => {
     message: "Hello, Student !",
   });
 });
+
+
 app.use("/api/auth", authRouters)
+app.use('/api/categories', categoryRouters)
+app.use('/api/products', productRouters)
+app.use('/api/carts', transactionRouters)
 
 // ===========================
 
@@ -72,15 +73,12 @@ app.get("*", (req, res) => {
   res.sendFile(join(__dirname, clientPath, "index.html"));
 });
 
-app.use('/api/categories', categoryRouters)
-app.use('/api/products', productRouters)
 //#endregion
-
 app.listen(PORT, (err) => {
   if (err) {
     console.log(`ERROR: ${err}`);
   } else {
-    //db.sequelize.sync({alter:true})
+    // db.sequelize.sync({alter:true})
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });

@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr } f
 
 export const Board = () => {
     return (
-        <Flex bgColor="white" direction="column" alignItems="center" p="10px"
+        <Flex bgColor="white" direction="column" alignItems="center" p="10px" borderRadius="5px"
          boxShadow="1px 1px 3px black" ml={{ base: '0px', md:'20px', lg: '30px'}} mt={{ base: '20px', lg: '0px'}}>
             <Heading fontSize="20px">Top Selling Products</Heading>
             <TableContainer mt="10px">

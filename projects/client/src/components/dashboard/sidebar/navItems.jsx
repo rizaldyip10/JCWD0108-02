@@ -1,15 +1,16 @@
-import { Flex, Icon, Text } from "@chakra-ui/react"
-import { IconContext } from "react-icons/lib"
-import { Link } from "react-router-dom"
+import { Box, Flex, Icon } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
-
-export const NavItem = ({ icon, title, page, color, size, ...props }) => {
+export const NavItem = ({ icon, children, hoverColor, hoverBg, page, ...rest }) => {
     return (
-        <Flex as={Link} to={page} color={color} {...props} alignItems="center">
-            <IconContext.Provider value={{ color: color, size: size }}>
-                <Icon as={icon} />
-            </IconContext.Provider>
-            <Text ml={3}>{title}</Text>
+      <Box as={Link} to={page} href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+        <Flex align="center" p="4" mx="4" borderRadius="lg"
+          role="group" cursor="pointer" _hover={{ bg: hoverBg, color: hoverColor, }} {...rest}>
+            {icon && (
+                <Icon mr="4" fontSize="16" _groupHover={{ color: 'white', }} as={icon}/>
+            )}
+            {children}
         </Flex>
-    )
-}
+      </Box>
+    );
+  };

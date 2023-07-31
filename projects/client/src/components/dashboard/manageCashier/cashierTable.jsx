@@ -27,7 +27,7 @@ export const CashierTable = () => {
                             </Flex>
                         </Td>
                         <Td>
-                            <Text color="green.500">Active</Text> 
+                            <Text color="red.500">Disabled</Text> 
                         </Td>
                         <Td>
                             <Text>Jl. Burangrang No.69</Text> 

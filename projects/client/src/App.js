@@ -11,7 +11,10 @@ import { AdminDashboard } from "./pages/adminDashboard";
 import { Cashier } from "./components/dashboard/manageCashier/cashier";
 import { AdminHome } from "./components/dashboard/home/adminHome";
 import { ChangeProfilePicture } from "./components/imgProfle";
-
+import { Navbar } from './components/landingPage/navbar';
+import { Homepage } from './pages/homepage';
+import { DashboardProduct } from './components/admin/dashboardProduct';
+import { DashboardCashier } from "./components/admin/dashboardCashier";
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/forgotpass", element: <ForgotPassword /> },
@@ -25,7 +28,16 @@ const router = createBrowserRouter([
       { path: "cashier", element: <Cashier /> },
     ],
   },
+  {path:"/",
+  element:<Navbar/>,
+  children:[
+    {path: "/",element:<Homepage/>},
+  ]
+},
+{path: "/dashboard",element:<DashboardProduct/>},
+{path: "/cashier",element:<DashboardCashier/>},
 ]);
+
 function App() {
   const token = localStorage.getItem("token");
   const headers = {
@@ -34,7 +46,7 @@ function App() {
   const dispatch = useDispatch();
   const keepLogin = async () => {
     try {
-      const response = await Axios.get("http://localhost:5001/auth/keeplogin", {
+      const response = await Axios.get("http://localhost:8000/auth/keeplogin", {
         headers,
       });
       dispatch(setValue(response.data));
