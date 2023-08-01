@@ -44,7 +44,6 @@ module.exports = {
                 ],
                 subQuery: false
             })
-
             const total = await Transaction.count({ where: condition })
 
             res.status(200).send({

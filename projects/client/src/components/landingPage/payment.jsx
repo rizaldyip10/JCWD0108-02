@@ -17,7 +17,7 @@ export const Payment = ({ totalPrice, reload, setReload }) => {
           currency: "IDR",
         }).format(amount);
       };
-    
+
     return (
         <Box mt="15px">
             <Heading fontSize="24px">Order Summary</Heading>
