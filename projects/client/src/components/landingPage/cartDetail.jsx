@@ -112,12 +112,12 @@ export const CartCard = () => {
     }, [reload])
 
     return items?.length > 0 ? (
-        <Box bg="white" w="400px" h="100%" p="20px" ml="20px"
-        borderRadius="15px" boxShadow="1px 1px 3px black" mt="10px">
+        <Box bg="white" w="400px" h="100%" p="20px"
+        borderRadius="15px" boxShadow="1px 1px 3px black" mt="50px">
             <Heading fontSize="24px">Order Detail</Heading>
-                    {items?.map((item) => {
+                    {items?.map((item, index) => {
                         return (
-                            <Flex mt="15px">
+                            <Flex mt="15px" key={index}>
                                 <Image w="100px" h="100px" src={item.Product.productImage} objectFit="cover" />
                                 <Box ml="10px">
                                     <Text fontSize="16px" fontWeight="bold">{item.Product.productName}</Text>
@@ -156,8 +156,8 @@ export const CartCard = () => {
             <Payment totalPrice={totalPrice} reload={reload} setReload={setReload} />
         </Box>
     ) : (
-        <Flex bg="white" w="400px" p="20px" ml="20px" position="fixed" right="20"
-        borderRadius="15px" boxShadow="1px 1px 3px black" mt="10px" justify="center"
+        <Flex bg="white" w="400px" h="100%" p="20px" justifyContent="center"
+        borderRadius="15px" boxShadow="1px 1px 3px black" mt="50px" justify="center"
         align="center" direction="column">
             <Image maxW="200px" src="https://img.freepik.com/free-vector/shopping-cart-realistic_1284-6011.jpg?w=2000"/>
             <Heading fontSize="26px">No item in the chart</Heading>
