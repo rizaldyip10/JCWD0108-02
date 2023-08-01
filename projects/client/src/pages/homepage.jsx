@@ -17,13 +17,15 @@ export const Homepage = () => {
             <Category/>
           </Stack>
         </Box>
-        <Box>
-          <Stack mt={10}>
-            <Heading fontSize={'md'} fontFamily={'body'} fontWeight={500} color={'green'}>
-                  Product
-            </Heading>
-            <Product/>
-          </Stack>
+      <Box>
+
+      <Stack mt={10}>
+      <Heading fontSize={'md'} fontFamily={'body'} fontWeight={500} color={'green'}>
+            Product
+      </Heading>
+      <Product/>
+      </Stack>
+
         </Box>
       </Box>
       <CartCard />
