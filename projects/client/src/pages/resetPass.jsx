@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import {
   Flex,
   Box,
@@ -14,6 +14,8 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
+
 export const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,7 +38,7 @@ export const ResetPassword = () => {
   const handleSubmit = async (data) => {
     try {
       const response = await Axios.patch(
-        "http://localhost:8000/auth/resetPass",
+        "http://localhost:8000/api/auth/forgotPass",
         data,
         { headers }
       );
@@ -58,6 +60,7 @@ export const ResetPassword = () => {
       initialValues={{
         password: "",
         confirmPassword: "",
+        recaptcha: "",
       }}
       validationSchema={resetSchema}
       onSubmit={(value, action) => {
@@ -141,13 +144,24 @@ export const ResetPassword = () => {
                   Show Password
                 </Checkbox>
                 <Stack spacing={6}>
+                <Box mt={4} w="100%" mx="auto">
+                      <Flex justify={"center"} align={"center"}>
+                        <ReCAPTCHA
+                          sitekey={"6Lc05mgnAAAAAAwI0woSJin3hN9d-FymlUvqssLo"}
+                          onChange={(value) =>
+                            props.setFieldValue("recaptcha", value)
+                          }
+                        />
+                      </Flex>
+                    </Box>
                   <Button
                     bg={"green.400"}
                     color={"white"}
                     _hover={{
                       bg: "green.500",
                     }}
-                    isDisabled={!props.dirty}
+                    isLoading={props.isSubmitting}
+                    isDisabled={!props.dirty|| !props.isValid ||!props.values.recaptcha}
                     type="submit"
                   >
                     Submit
