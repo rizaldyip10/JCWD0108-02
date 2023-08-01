@@ -8,8 +8,6 @@ module.exports = {
             const limit = +req.query.limit || 10;
             const offset = (page - 1) * limit;
             const search = req.query.search;
-            const catId = +req.query.catId;
-            const transId = +req.query.transId
             const sort = req.query.sort || 'DESC';
             const sortBy = req.query.sortBy || 'createdAt';
             const dateStart = req.query.dateStart
@@ -18,12 +16,6 @@ module.exports = {
             
             if (search) {
                 condition[Op.or] = [{ productName: { [Op.like]: `%${search}%` } }];
-            }
-            if (catId) {
-                condition.CategoryId = catId;
-            }
-            if (transId) {
-                condition.TransactionId = transId
             }
             if (dateStart || dateEnd) {
                 condition.createdAt = {
@@ -52,7 +44,16 @@ module.exports = {
                 ],
                 subQuery: false
             })
-            res.status(200).send(result)
+
+            const total = await Transaction.count({ where: condition })
+
+            res.status(200).send({
+                currentPage: page,
+                totalPage: Math.ceil(total / limit),
+                total: total,
+                limit,
+                result,
+            })
         } catch (error) {
             res.status(400).send(error)
         }
