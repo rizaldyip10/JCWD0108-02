@@ -1,24 +1,25 @@
-require("dotenv/config");
+require("dotenv").config()
+
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 
-const { categoryRouters, productRouters, authRouters, transactionRouters } = require('./routers')
+const { categoryRouters, productRouters, authRouters, transactionRouters, reportRouters } = require('./routers')
 const db = require('./models');
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
   cors({
-    origin: [
+    /*origin: [
       process.env.WHITELISTED_DOMAIN &&
         process.env.WHITELISTED_DOMAIN.split(","),
-    ],
+    ],*/
   })
 );
 
 app.use(express.json());
-
+app.use(express.static("./public"))
 //#region API ROUTES
 
 // ===========================
@@ -33,12 +34,12 @@ app.get("/api/greetings", (req, res, next) => {
     message: "Hello, Student !",
   });
 });
-app.use("/api/auth", authRouters)
 
 app.use("/api/auth", authRouters)
 app.use('/api/categories', categoryRouters)
 app.use('/api/products', productRouters)
 app.use('/api/carts', transactionRouters)
+app.use('/api/reports', reportRouters)
 
 // ===========================
 
@@ -77,7 +78,7 @@ app.listen(PORT, (err) => {
   if (err) {
     console.log(`ERROR: ${err}`);
   } else {
-    // db.sequelize.sync({alter:true})
+    // db.sequelize.sync({alter: true})
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });
