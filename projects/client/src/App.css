@@ -1,0 +1,21 @@
+::-webkit-scrollbar {
+    width: .3em;
+    height: .3em;
+}
+
+::-webkit-scrollbar-track {
+    background: #16f230;
+    /* border-radius: 100vw; */
+    /* margin-block: .5em; */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0e6117;
+    border-radius: 100vw;
+}
+
+@supports (scrollbar-color: red blue) {
+    * {
+        scrollbar-color: #0e6117 #16f230;
+    }
+}
