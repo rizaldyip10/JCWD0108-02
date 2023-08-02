@@ -41,7 +41,6 @@ const router = createBrowserRouter([
     {path: "/",element:<Homepage/>},
   ]
 },
-{path: "/dashboard",element:<DashboardProduct/>},
 {path: "/cashier",element:<DashboardCashier/>},
 ]);
 
