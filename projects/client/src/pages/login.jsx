@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 import {
   Flex,
   Box,
@@ -7,12 +8,15 @@ import {
   RadioGroup,
   Stack,
   Heading,
+  useToast,
 } from "@chakra-ui/react";
 import Axios from "axios";
-import { FaUser, FaEnvelope, FaPhone } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaPhone, FaKey } from "react-icons/fa";
 import { UsernameLogin } from "../components/logins/usernameLogin";
 import { EmailLogin } from "../components/logins/emailLogin";
 import { PhoneLogin } from "../components/logins/phoneLogin";
+import { OTPLogin } from "../components/logins/otpLogin";
+
 
 const CustomRadioButton = ({ icon, value, isChecked, onChange }) => (
   <Box
@@ -38,20 +42,41 @@ const CustomRadioButton = ({ icon, value, isChecked, onChange }) => (
 export const Login = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [loginMethod, setLoginMethod] = useState("username");
-
+  const toast = useToast();
+  const navigate = useNavigate()
+  const token = localStorage.getItem("token")
   const handleShowLogin = (value) => {
     setLoginMethod(value);
   };
 
   const handleSubmit = async (data) => {
+
     try {
       const response = await Axios.post("http://localhost:8000/api/auth/login", data);
       console.log(response);
       localStorage.setItem("token", response.data.token);
+      toast({
+        title: "Login Successful",
+        description: "You have successfully logged in.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      navigate("/")
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Login Failed",
+        description: error.response.data.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
     }
   };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowLogin(true);
@@ -59,7 +84,7 @@ export const Login = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  return (
+  return !token ?( 
     <Box>
       <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"green.50"}>
         <Stack
@@ -101,6 +126,13 @@ export const Login = () => {
                     isChecked={loginMethod === "phone"}
                     onChange={() => handleShowLogin("phone")}
                   />
+
+                  <CustomRadioButton
+                    icon={FaKey}
+                    value="otp"
+                    isChecked={loginMethod === "otp"}
+                    onChange={() => handleShowLogin("otp")}
+                  />
                 </Stack>
               </RadioGroup>
             </FormControl>
@@ -109,11 +141,13 @@ export const Login = () => {
             <UsernameLogin handleSubmit={handleSubmit} />
           ) : loginMethod === "email" ? (
             <EmailLogin handleSubmit={handleSubmit} />
-          ) : (
+          ) : loginMethod === "phone" ? (
             <PhoneLogin handleSubmit={handleSubmit} />
+          ) : (
+            <OTPLogin />
           )}
         </Stack>
       </Flex>
     </Box>
-  );
+  ) : (<Navigate to="/"/>) ;
 };

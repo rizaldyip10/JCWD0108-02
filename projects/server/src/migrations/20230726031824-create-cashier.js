@@ -39,6 +39,9 @@ module.exports = {
       isDeleted: {
         type: Sequelize.BOOLEAN
       },
+      isBanned: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
