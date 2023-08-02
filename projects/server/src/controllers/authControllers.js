@@ -78,7 +78,7 @@ module.exports = {
       const username = result.username;
       const payload = { id: result.id };
       const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1h" });
-      const data = await fs.readFileSync("./src/templateforgotpass.html", "utf-8");
+      const data = await fs.readFileSync("./src/templates/templateforgotpass.html", "utf-8");
       const tempCompile = await handlebars.compile(data);
       const tempResult = tempCompile({ username, token });
       await transporter.sendMail({

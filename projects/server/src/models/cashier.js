@@ -12,19 +12,21 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Cashier.hasMany(models.cartDetail)
+      Cashier.hasOne(models.Otp)
     }
   }
   Cashier.init({
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    email: DataTypes.STRING,
+    username: {type:DataTypes.STRING, allowNull:false},
+    password: {type:DataTypes.STRING, allowNull:false},
+    email: {type:DataTypes.STRING, allowNull:false},
     phone: DataTypes.STRING,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     address: DataTypes.STRING,
     imgProfile: DataTypes.STRING,
-    isAdmin: DataTypes.BOOLEAN,
-    isDeleted: DataTypes.BOOLEAN
+    isAdmin: {type: DataTypes.BOOLEAN, defaultValue:false},
+    isDeleted: {type: DataTypes.BOOLEAN, defaultValue:false},
+    isBanned:{type: DataTypes.BOOLEAN, defaultValue:false},
   }, {
     sequelize,
     modelName: 'Cashier',

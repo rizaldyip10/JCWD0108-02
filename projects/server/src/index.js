@@ -4,8 +4,9 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 
-const { categoryRouters, productRouters, authRouters, transactionRouters } = require('./routers')
+const { categoryRouters, productRouters, authRouters, transactionRouters, otpRouters } = require('./routers')
 const db = require('./models');
+
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -36,7 +37,7 @@ app.get("/api/greetings", (req, res, next) => {
 });
 
 
-app.use("/api/auth", authRouters)
+app.use("/api/auth", authRouters, otpRouters)
 app.use('/api/categories', categoryRouters)
 app.use('/api/products', productRouters)
 app.use('/api/carts', transactionRouters)
