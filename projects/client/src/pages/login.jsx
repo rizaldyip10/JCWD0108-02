@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 import {
   Flex,
   Box,
@@ -42,11 +43,14 @@ export const Login = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [loginMethod, setLoginMethod] = useState("username");
   const toast = useToast();
+  const navigate = useNavigate()
+  const token = localStorage.getItem("token")
   const handleShowLogin = (value) => {
     setLoginMethod(value);
   };
 
   const handleSubmit = async (data) => {
+
     try {
       const response = await Axios.post("http://localhost:8000/api/auth/login", data);
       console.log(response);
@@ -59,6 +63,7 @@ export const Login = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/")
     } catch (error) {
       console.log(error);
       toast({
@@ -79,7 +84,7 @@ export const Login = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  return (
+  return !token ?( 
     <Box>
       <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"green.50"}>
         <Stack
@@ -144,5 +149,5 @@ export const Login = () => {
         </Stack>
       </Flex>
     </Box>
-  );
+  ) : (<Navigate to="/"/>) ;
 };

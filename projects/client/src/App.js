@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { useDispatch } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 import { setValue } from "./redux/cashierSlice";
 import { Login } from "./pages/login";
 import { ForgotPassword } from "./pages/forgotPass";
@@ -58,19 +58,23 @@ const router = createBrowserRouter([
 
 function App() {
   const token = localStorage.getItem("token");
+ 
   const headers = {
     Authorization: `Bearer ${token}`,
   };
   const dispatch = useDispatch();
   const keepLogin = async () => {
     try {
-      const response = await Axios.get("http://localhost:8000/api/auth/keeplogin", {
+      const response = await Axios.get("http://localhost:8000/api/auth/login", {
         headers,
       });
       dispatch(setValue(response.data));
       console.log(response.data);
     } catch (error) {
       console.log(error);
+      localStorage.removeItem("token")
+     
+
     }
   };
   useEffect(() => {
