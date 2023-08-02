@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
@@ -17,6 +19,7 @@ export const OTPLogin = () => {
   const [email, setEmail] = useState("");
   const [showOTP, setShowOTP] = useState(false); 
   const toast = useToast()
+  const navigate = useNavigate()
   const emailSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
@@ -75,6 +78,7 @@ export const OTPLogin = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/")
     } catch (error) {
       console.log(error);
       toast({
