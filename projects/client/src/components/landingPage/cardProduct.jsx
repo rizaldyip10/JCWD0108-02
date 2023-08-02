@@ -14,7 +14,7 @@ import Axios from 'axios';
 import { Counter } from '../counter';
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 
-export  const Product = () => {
+export  const Product = ({ reload, setReload }) => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -34,7 +34,7 @@ export  const Product = () => {
 
   useEffect(() => {
     getProducts(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, reload]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPage) {
@@ -93,7 +93,7 @@ export  const Product = () => {
               <Heading fontSize={'sm'} fontFamily={'body'} fontWeight={500} color={'green'}>
                 {item.productPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
               </Heading>
-              {showCounterComponent && <Counter id={item.id} />}
+              {showCounterComponent && <Counter id={item.id} reload={reload} setReload={setReload} />}
             </Stack>
           </Box>
         ))}

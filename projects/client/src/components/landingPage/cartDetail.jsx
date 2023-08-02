@@ -6,9 +6,8 @@ import { BsFillTrashFill } from "react-icons/bs";
 import Axios from "axios";
 
 
-export const CartCard = () => {
+export const CartCard = ({ reload, setReload}) => {
     const [items, setItems] = useState();
-    const [reload, setReload] = useState(true);
     const TOKEN = localStorage.getItem("token")
 
     const getCart = async () => {
@@ -124,7 +123,7 @@ export const CartCard = () => {
                                     <Flex mt="4" alignItems="center">
                                         <IconButton
                                         icon={<AiOutlineMinus />}
-                                        onClick={() => decreaseQuantity(item.id)}
+                                        onClick={item.totalItems === 1 ? () => handleDelete(item.id) : () => decreaseQuantity(item.id)}
                                         borderRadius="50%"
                                         size="sm"
                                         />
