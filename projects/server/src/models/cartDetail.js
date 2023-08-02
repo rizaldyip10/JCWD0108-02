@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      cartDetail.belongsTo(models.Cashier)
+      cartDetail.belongsTo(models.Cart)
       cartDetail.belongsTo(models.Product)
     }
   }
@@ -19,10 +19,10 @@ module.exports = (sequelize, DataTypes) => {
     totalItems: {
       type: DataTypes.INTEGER
     },
-    isPaid: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-  }
+
+    totalPrice: {
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'cartDetail',

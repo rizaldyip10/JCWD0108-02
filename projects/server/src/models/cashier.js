@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Cashier.hasMany(models.cartDetail)
       Cashier.hasOne(models.Otp)
+      Cashier.hasMany(models.Cart)
+      Cashier.hasMany(models.Transaction)
     }
   }
   Cashier.init({

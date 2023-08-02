@@ -4,7 +4,8 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 
-const { categoryRouters, productRouters, authRouters, transactionRouters, otpRouters } = require('./routers')
+
+const { categoryRouters, productRouters, authRouters, transactionRouters, reportRouters, otpRouters } = require('./routers')
 const db = require('./models');
 
 
@@ -41,6 +42,7 @@ app.use("/api/auth", authRouters, otpRouters)
 app.use('/api/categories', categoryRouters)
 app.use('/api/products', productRouters)
 app.use('/api/carts', transactionRouters)
+app.use('/api/reports', reportRouters)
 
 // ===========================
 
@@ -79,7 +81,7 @@ app.listen(PORT, (err) => {
   if (err) {
     console.log(`ERROR: ${err}`);
   } else {
-    // db.sequelize.sync({alter:true})
+    // db.sequelize.sync({alter: true})
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });

@@ -48,10 +48,7 @@ export const Login = () => {
 
   const handleSubmit = async (data) => {
     try {
-      const response = await Axios.post(
-        "http://localhost:8000/api/auth/login",
-        data
-      );
+      const response = await Axios.post("http://localhost:8000/api/auth/login", data);
       console.log(response);
       localStorage.setItem("token", response.data.token);
       toast({
@@ -84,7 +81,6 @@ export const Login = () => {
 
   return (
     <Box>
-      
       <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"green.50"}>
         <Stack
           spacing={8}
@@ -105,10 +101,7 @@ export const Login = () => {
           <Flex justify="center">
             <FormControl as="fieldset">
               <FormLabel as="legend">Login Method</FormLabel>
-              <RadioGroup
-                value={loginMethod}
-                onChange={(e) => handleShowLogin(e)}
-              >
+              <RadioGroup value={loginMethod} onChange={(e) => handleShowLogin(e)}>
                 <Stack direction="row" spacing={6} align="center">
                   <CustomRadioButton
                     icon={FaUser}
@@ -139,7 +132,6 @@ export const Login = () => {
               </RadioGroup>
             </FormControl>
           </Flex>
-
           {loginMethod === "username" ? (
             <UsernameLogin handleSubmit={handleSubmit} />
           ) : loginMethod === "email" ? (
