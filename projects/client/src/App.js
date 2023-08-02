@@ -37,14 +37,6 @@ const router = createBrowserRouter([
   ]},
   { path: "/resetpass/:token", element: <ResetPassword /> },
   { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
-  {
-    path: "/admin",
-    element: <AdminDashboard />,
-    children: [
-      { path: "", element: <AdminHome /> },
-      { path: "cashier", element: <Cashier /> },
-    ],
-  },
   {path:"/",
   element:<Navbar/>,
   children:[
@@ -54,7 +46,6 @@ const router = createBrowserRouter([
 {path: "/dashboard",element:<DashboardProduct/>},
 {path: "/cashier",element:<DashboardCashier/>},
 ]);
-
 
 function App() {
   const token = localStorage.getItem("token");

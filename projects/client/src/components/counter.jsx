@@ -2,7 +2,7 @@ import { Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
 import Axios from "axios";
 import { useState } from "react";
 
-export const Counter = ({ id }) => {
+export const Counter = ({ id, reload, setReload }) => {
     const [quantity, setQuantity] = useState(1);
     const [isBuying, setIsBuying] = useState(false);
     const TOKEN = localStorage.getItem("token")
@@ -29,7 +29,7 @@ export const Counter = ({ id }) => {
           Authorization: `Bearer ${TOKEN}`
         }
       })
-      window.location.reload()
+      setReload(!reload)
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +62,7 @@ export const Counter = ({ id }) => {
             </Flex>
             </Stack>
               <Button
-                onClick={handleConfirmClick}
+                onClick={quantity === 0 ? setIsBuying(false) : handleConfirmClick}
                 alignItems={"center"}
                 bg="green"
                 color="white"
