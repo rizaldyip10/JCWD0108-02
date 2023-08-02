@@ -37,9 +37,7 @@ const router = createBrowserRouter([
   ]},
   { path: "/resetpass/:token", element: <ResetPassword /> },
   { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
-  {path:"/",
-  element:<Navbar/>,
-  children:[
+  {path:"/", element: <Navbar/>, children:[
     {path: "/",element:<Homepage/>},
   ]
 },

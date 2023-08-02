@@ -53,7 +53,6 @@ module.exports = {
                 result,
             })
         } catch (error) {
-            console.log(error);
             res.status(400).send(error)
         }
     },
@@ -92,7 +91,6 @@ module.exports = {
             console.log(yesterdayIncome);
             res.status(200).send(result.toString())
         } catch (error) {
-            console.log(error);
             res.status(400).send(error)
         }
     },
