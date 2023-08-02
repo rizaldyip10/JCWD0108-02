@@ -13,15 +13,14 @@ module.exports = {
             const dateStart = req.query.dateStart
             const dateEnd = req.query.dateEnd
             const condition = {}
-            
 
             if (search) {
                 condition[Op.or] = [{ id: { [Op.like]: `%${search}%` } }];
             }
             if (dateStart || dateEnd) {
                 condition.createdAt = {[Op.and]: {
-                    [Op.gte]: new Date(dateStart).toLocaleDateString(),
-                    [Op.lte]: new Date(dateEnd).toLocaleDateString()
+                    [Op.gte]: new Date(dateStart).setHours(-17,0,0,0),
+                    [Op.lte]: new Date(dateEnd).setHours(6,59,59,599)
                 }}}
 
             const result = await Transaction.findAll({
@@ -55,6 +54,114 @@ module.exports = {
             })
         } catch (error) {
             console.log(error);
+            res.status(400).send(error)
+        }
+    },
+    profit: async (req, res) => {
+        try {
+            const todayStart = new Date()
+            todayStart.setDate(todayStart.getDate() + 1)
+            todayStart.setHours(-17,0,0,0)
+
+            const todayEnd = new Date()
+            todayEnd.setDate(todayEnd.getDate() + 1)
+            todayEnd.setHours(6,59,59,599)
+            const todayIncome = await Transaction.sum("amount", {
+                where: {
+                    createdAt: {
+                        [Op.and]: {
+                            [Op.gte]: todayStart,
+                            [Op.lte]: todayEnd
+                        }
+                    }
+                }
+            })
+
+            const yesterdayIncome = await Transaction.sum("amount", {
+                where: {
+                    createdAt: {
+                        [Op.and]: {
+                            [Op.gte]: new Date().setHours(-17,0,0,0),
+                            [Op.lte]: new Date().setHours(6,59,59,599)
+                        }
+                    }
+                }
+            })
+
+            const result = todayIncome - yesterdayIncome
+            console.log(yesterdayIncome);
+            res.status(200).send(result.toString())
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error)
+        }
+    },
+    todayOrder: async (req, res) => {
+        try {
+            const todayStart = new Date()
+            todayStart.setDate(todayStart.getDate() + 1)
+            todayStart.setHours(-17,0,0,0)
+
+            const todayEnd = new Date()
+            todayEnd.setDate(todayEnd.getDate() + 1)
+            todayEnd.setHours(6,59,59,599)
+
+            const result = await Transaction.count({
+                where: {
+                    createdAt: {
+                        [Op.and]: {
+                            [Op.gte]: todayStart,
+                            [Op.lte]: todayEnd
+                        }
+                    }
+                }
+            })
+
+            res.status(200).send(result.toString())
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+    topProduct: async (req, res) => {
+        try {
+            const allTransactions = await Transaction.findAll({
+                include: [
+                  {
+                    model: transactionDetail,
+                    include: {
+                      model: Product
+                    }}]
+              })
+          
+              const productSalesCount = {}
+          
+              allTransactions.forEach((transaction) => {
+                transaction.transactionDetails.forEach((detail) => {
+                  const { Product, totalItems } = detail;
+                  if (productSalesCount[Product.productName]) {
+                    productSalesCount[Product.productName] += totalItems;
+                  } else {
+                    productSalesCount[Product.productName] = totalItems;
+                  }})
+              })
+          
+              const productSalesArray = Object.keys(productSalesCount).map((productName) => ({
+                productName,
+                salesCount: productSalesCount[productName]
+              }))
+          
+              productSalesArray.sort((a, b) => b.salesCount - a.salesCount)
+          
+              res.status(200).send(productSalesArray)
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+    totalCashier: async (req, res) => {
+        try {
+           const result = await Cashier.count()
+           res.status(200).send(result.toString()) 
+        } catch (error) {
             res.status(400).send(error)
         }
     }
