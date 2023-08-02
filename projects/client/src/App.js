@@ -19,6 +19,7 @@ import { ChangeProfilePicture } from "./components/imgProfle";
 import { DashboardCashier } from "./components/admin/dashboardCashier";
 import { TransHistory } from "./pages/transHistory";
 import { AdminReport } from "./components/dashboard/report/transTable";
+import "./App.css"
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
