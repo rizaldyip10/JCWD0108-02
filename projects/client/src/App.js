@@ -37,7 +37,6 @@ const router = createBrowserRouter([
   ]},
   { path: "/resetpass/:token", element: <ResetPassword /> },
   { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
-  { path: "/footer", element: <Footer /> },
    { path: '/admin', element: <AdminDashboard />, children: [
       { path: '', element: <AdminHome />},
       { path: 'cashier', element: <Cashier />}
@@ -49,7 +48,6 @@ const router = createBrowserRouter([
       {path: "/",element:<Homepage/>},
     ]
   },
-  {path: "/dashboard",element:<DashboardProduct/>},
   {path: "/cashier",element:<DashboardCashier/>},
     ]
 )

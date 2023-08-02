@@ -1,20 +1,34 @@
-import { Box, Button, Flex, Input, Select, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useColorModeValue, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Flex, Input, Select, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, useDisclosure } from "@chakra-ui/react"
 import Axios from "axios";
 import { useEffect, useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import { DateSelect } from "../../transHistory/dateSelect";
 import { DetailModal } from "../../transHistory/modalDetail";
 
 
-
-export const AdminReport = () => {
+export const AdminReport = ({ reload, setReload }) => {
     const [order, setOrder] = useState()
     const [selectedOrder, setSelectedOrder] = useState(null)
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [sort, setSort] = useState("DESC")
+    const [sortBy, setSortBy] = useState("createdAt")
+    const [selectedSort, setSelectedSort] = useState()
+    const [selectedSortBy, setSelectedSortBy] = useState()
+    const [searchTerm, setSearchTerm] = useState("")
+    const [startDate, setStartDate] = useState(new Date())
+    const [endDate, setEndDate] = useState(new Date())
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPage, setTotalPage] = useState(1)
+    const [itemsPerPage, setItemsPerPage] = useState(10)
 
-    const getOrder = async () => {
+    const getOrder = async (page, limit) => {
         try {
-            const response = await Axios.get("http://localhost:8000/api/reports?limit=20")
+            const response = await Axios.get(
+                `http://localhost:8000/api/reports?sort=${sort}&sortBy=${sortBy}&search=${searchTerm}&dateStart=${startDate}&dateEnd=${endDate}&limit=${limit}&page=${page}`
+                )
             setOrder(response.data.result)
-            console.log(response.data.result);
+            setTotalPage(response.data.totalPage)
         } catch (error) {
             console.log(error);
         }
@@ -27,22 +41,63 @@ export const AdminReport = () => {
         }).format(amount);
       };
 
-    useEffect(() => {
-        getOrder()
-    },[])
+      const openModal = (value) => {
+          setSelectedOrder(value);
+          onOpen();
+        };
+      
+      const handleSort = (event) => {
+          setSort(event.target.value)
+          setSelectedSort(event.target.value)
+          setReload(!reload)
+      }
+      const handleSortBy = (event) => {
+          setSortBy(event.target.value)
+          setSelectedSortBy(event.target.value)
+          setReload(!reload)
+      }
 
-    const openModal = (value) => {
-        setSelectedOrder(value);
-        onOpen();
+      const handleSearch = (event) => {
+        setSearchTerm(event.target.value)
+        setReload(!reload)
+      }
+      const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPage) {
+          setCurrentPage(newPage);
+        }
       };
+    useEffect(() => {
+        getOrder(currentPage, itemsPerPage, startDate, endDate, sort, sortBy, searchTerm,)
+    },[currentPage, itemsPerPage, startDate, endDate, sort, sortBy, searchTerm, reload])
+
     return (
-        <Box p={10} bg={useColorModeValue("green.50","green.800")}>
+        <Flex p={10} bg={useColorModeValue("green.50","green.800")}
+        direction="column" minH="100vh">
             <Flex justifyContent="space-between">
-                <Input maxW="300px" />
-                <Flex>
-                    <Select maxW="100px" mr={{ base: "5px", lg: "20px"}} />
-                    <Select maxW="100px" />
+                <Input maxW="300px" placeholder="Search"
+                onChange={(e) => handleSearch(e)} value={searchTerm} />
+                <Flex alignItems="center">
+                    <Select maxW="200px" mr={{ base: "5px", lg: "20px"}} placeholder="Sort By"
+                    onChange={handleSortBy} value={selectedSortBy}>
+                        <option value="id">Order ID</option>
+                        <option value="createdAt">Date</option>
+                    </Select>
+                    <Select maxW="100px" placeholder="Sort"
+                    onChange={(e) => handleSort(e)} value={selectedSort}>
+                        <option value="ASC">ASC</option>
+                        <option value="DESC">DESC</option>
+                    </Select>
                 </Flex>
+            </Flex>
+            <Flex direction={{ base: "column", lg: "row"}}>
+                <DateSelect selected={startDate} onChange={(date) => {
+                    setStartDate(date)
+                    setReload(!reload)
+                    }} />
+                <DateSelect selected={endDate} onChange={(date) => {
+                    setEndDate(date)
+                    setReload(!reload)
+                    }}   />
             </Flex>
             <TableContainer mt="20px">
                 <Table>
@@ -80,6 +135,30 @@ export const AdminReport = () => {
                     </Tbody>
                 </Table>
             </TableContainer>
-        </Box>
+            <Box mt={5} display="flex" justifyContent="center" alignItems="center">
+                <Button
+                onClick={() => handlePageChange(currentPage - 1)}
+                isDisabled={currentPage === 1}
+                mr={2}
+                size="sm"
+                bg={"green"}
+                >
+                <ArrowBackIcon color={"white"}></ArrowBackIcon>
+                </Button>
+                <Text fontSize="sm" mr={2}>
+                Page {currentPage} of {totalPage}
+                </Text>
+                <Button
+                onClick={() => handlePageChange(currentPage + 1)}
+                isDisabled={currentPage >= totalPage}
+                ml={2}
+                size="sm"
+                bg={"green"}
+
+                >
+                <ArrowForwardIcon color={"white"}></ArrowForwardIcon>
+                </Button>
+            </Box>
+        </Flex>
     )
 }
