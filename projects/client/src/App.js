@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { useDispatch } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 import { setValue } from "./redux/cashierSlice";
 import { Login } from "./pages/login";
 import { ForgotPassword } from "./pages/forgotPass";
@@ -37,36 +37,35 @@ const router = createBrowserRouter([
   ]},
   { path: "/resetpass/:token", element: <ResetPassword /> },
   { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
-   { path: '/admin', element: <AdminDashboard />, children: [
-      { path: '', element: <AdminHome />},
-      { path: 'cashier', element: <Cashier />}
-   ]},
-   
-    {path:"/",
-    element:<Navbar/>,
-    children:[
-      {path: "/",element:<Homepage/>},
-    ]
-  },
-  {path: "/cashier",element:<DashboardCashier/>},
-    ]
-)
+  {path:"/",
+  element:<Navbar/>,
+  children:[
+    {path: "/",element:<Homepage/>},
+  ]
+},
+{path: "/dashboard",element:<DashboardProduct/>},
+{path: "/cashier",element:<DashboardCashier/>},
+]);
 
 function App() {
   const token = localStorage.getItem("token");
+ 
   const headers = {
     Authorization: `Bearer ${token}`,
   };
   const dispatch = useDispatch();
   const keepLogin = async () => {
     try {
-      const response = await Axios.get("http://localhost:8000/api/auth/keeplogin", {
+      const response = await Axios.get("http://localhost:8000/api/auth/login", {
         headers,
       });
       dispatch(setValue(response.data));
       console.log(response.data);
     } catch (error) {
       console.log(error);
+      localStorage.removeItem("token")
+     
+
     }
   };
   useEffect(() => {

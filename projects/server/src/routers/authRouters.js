@@ -1,7 +1,7 @@
 const router = require("express").Router()
 const {authControllers} = require("../controllers")
 const {verifyToken} = require("../middlewares/auth")
-const { checkAddCashier, checkLogin, checkForgetPassword, checkResetPassword } = require("../middlewares/validator")
+const { checkAddCashier, checkLogin, checkForgetPassword, checkResetPassword } = require("../middlewares/validators/validatorAuth")
 const{multerUpload} = require("../middlewares/multer")
 
 router.get("/", authControllers.getCashiers)
