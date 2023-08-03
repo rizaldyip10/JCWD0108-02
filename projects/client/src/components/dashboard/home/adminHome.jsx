@@ -53,7 +53,8 @@ export const AdminHome = () => {
         totalCashier()
     },[])
     return (
-        <Flex direction="column" bg={useColorModeValue("green.50", "green.800")} p="30px">
+        <Flex direction="column" bg={useColorModeValue("green.50", "green.800")} p="30px"
+        minH="100vh">
             <Box>
                 <Heading fontSize={{ base: '18px', lg: '22px'}}>Overview</Heading>
                 <Flex direction={{ base: 'column', md: 'row'}} >
@@ -68,11 +69,11 @@ export const AdminHome = () => {
             </Box>
             <Box mt="30px">
                 <Heading fontSize="22px">Sales Update</Heading>
-                <Flex direction={{ base: 'column', md: 'row'}} w={{base: "300px", lg: "720px"}}>
+                <Flex direction={{ base: 'column', md: 'row'}} w={{ base: "300px", md: "500px", lg: "750px"}}>
                     <LineChart />
                     <Board />
                 </Flex>
-                <Flex direction={{ base: "column", lg: "row"}}>
+                <Flex direction={{ base: "column", md: "row"}} >
                     <RecentTrans />
                     <CashierPerform />
                 </Flex>

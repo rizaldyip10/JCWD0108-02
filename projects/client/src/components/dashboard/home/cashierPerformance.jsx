@@ -6,7 +6,7 @@ const IMAGE =
 
 export const CashierPerform = () => {
   return (
-    <Center py={12} mt="20px" ml={{ base: "0px", lg: "30px"}}>
+    <Center py={12} mt="40px" ml={{ base: "0px", md: "30px"}}>
       <Box
         role={'group'}
         p={6}
