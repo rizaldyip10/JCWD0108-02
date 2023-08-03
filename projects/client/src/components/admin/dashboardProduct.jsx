@@ -36,7 +36,7 @@ export const DashboardProduct = () => {
   const getCategories = async () => {
     try {
       const response = await Axios.get('http://localhost:8000/api/categories');
-      setCategories(response.data);
+      setCategories(response.data.result);
     } catch (error) {
       console.log(error);
     }

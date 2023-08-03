@@ -1,4 +1,5 @@
 import Axios from "axios";
+import "./App.css"
 import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 import { setValue } from "./redux/cashierSlice";
@@ -15,20 +16,9 @@ import { AdminDashboard } from "./pages/adminDashboard";
 import { Cashier } from "./components/dashboard/manageCashier/cashier";
 import { AdminHome } from "./components/dashboard/home/adminHome";
 import { ChangeProfilePicture } from "./components/imgProfle";
-// import { DashboardProduct } from './components/admin/dashboardProduct';
 import { DashboardCashier } from "./components/admin/dashboardCashier";
 import { TransHistory } from "./pages/transHistory";
 import { AdminReport } from "./components/dashboard/report/transTable";
-import "./App.css"
-
-
-
-function App() {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearchQueryChange = (query) => {
-    setSearchQuery(query);
-  };
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,8 +39,8 @@ const router = createBrowserRouter([
     {path: "/",element:<Homepage searchQuery={searchQuery}/>},
     {path: "detail",element:<Detailpage/>},
     {path: "create",element:<CreateProduct/>},
-    {path: "transaction",element: <TransHistory />}
-    // {path: "dashboard",element:<DashboardProduct/>},
+    {path: "transaction",element: <TransHistory />},
+    {path: "dashboard",element:<DashboardProduct/>},
   ]},
   { path: "/resetpass/:token", element: <ResetPassword /> },
   { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
@@ -83,7 +73,7 @@ const router = createBrowserRouter([
   };
   useEffect(() => {
     keepLogin();
-  }, []);
+  },[]);
   return (
     <div className="App">
       <RouterProvider router={router} />
