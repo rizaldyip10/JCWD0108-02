@@ -16,6 +16,7 @@ module.exports = {
 
             if (search) {
                 condition[Op.or] = [{ id: { [Op.like]: `%${search}%` } }];
+              
             }
             if (dateStart || dateEnd) {
                 condition.createdAt = {[Op.and]: {
