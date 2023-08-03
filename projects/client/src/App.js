@@ -30,6 +30,13 @@ function App() {
     setSearchQuery(query);
   };
 
+function App() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
+  };
+
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/forgotpass", element: <ForgotPassword /> },

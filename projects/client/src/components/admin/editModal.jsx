@@ -5,6 +5,7 @@ import {
 } from '@chakra-ui/react';
 import { EditProduct } from './editProduct';
 
+
 import { ChangeProfilePicture } from './imgProfle';
 
 
