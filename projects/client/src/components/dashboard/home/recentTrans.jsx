@@ -1,7 +1,28 @@
 import { Box, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
+import Axios from "axios"
+import { useEffect, useState } from "react"
 
 
 export const RecentTrans = () => {
+    const [order, setOrder] = useState()
+    
+    const getOrder = async () => {
+        try {
+            const response = await Axios.get("http://localhost:8000/api/reports?limit=5")
+            setOrder(response.data.result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const formatIDR = (amount) => {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+        }).format(amount);
+      };
+    useEffect(() => {
+        getOrder()
+    },[])
     return (
         <Box mt="20px">
             <Heading fontSize="22px">Recent Order</Heading>
@@ -16,31 +37,20 @@ export const RecentTrans = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <Tr>
-                            <Td>#0928</Td>
-                            <Td>23 Jun 2023</Td>
-                            <Td>Rp 25.000,00</Td>
-                        </Tr>
-                        <Tr>
-                            <Td>#2910</Td>
-                            <Td>23 Jun 2023</Td>
-                            <Td>Rp 100.000,00</Td>
-                        </Tr>
-                        <Tr>
-                            <Td>#3210</Td>
-                            <Td>23 Jun 2023</Td>
-                            <Td>Rp 50.000,00</Td>
-                        </Tr>
-                        <Tr>
-                            <Td>#4167</Td>
-                            <Td>23 Jun 2023</Td>
-                            <Td>Rp 35.000,00</Td>
-                        </Tr>
-                        <Tr>
-                            <Td>#1467</Td>
-                            <Td>23 Jun 2023</Td>
-                            <Td>Rp 65.000,00</Td>
-                        </Tr>
+                        {order?.map((v, i) => {
+                            return (
+                                <Tr key={i}>
+                                    <Td>{`#${v.id}`}</Td>
+                                    <Td>
+                                        {new Date(`${v.createdAt}`).toLocaleDateString("en-us", {
+                                        year: "numeric",
+                                        month: "short",
+                                        day: "numeric"})}
+                                    </Td>
+                                    <Td>{formatIDR(v.amount)}</Td>
+                                </Tr>
+                            )
+                        })}
                     </Tbody>
                 </Table>
             </TableContainer>

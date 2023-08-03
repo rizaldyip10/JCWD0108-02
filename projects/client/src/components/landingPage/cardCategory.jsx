@@ -17,10 +17,9 @@ export const Category = ({ onSelectCategory }) => {
 
   const getCategories = async (page, limit) => {
     try {
-      const response = await Axios.get(`http://localhost:8000/api/categories?page=${page}&limit=${limit}`);
-      const { result, totalPage: totalPages } = response.data;
-      setCategories(result);
-      setTotalPage(totalPages);
+      const response = await Axios.get('http://localhost:8000/api/categories');
+      console.log(response);
+      setCategories(response.data.result);
     } catch (error) {
       console.log(error);
     }

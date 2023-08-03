@@ -2,6 +2,7 @@ import { Box, Center, Flex, Heading, Stack,Text,useColorModeValue} from "@chakra
 import { Product } from "../components/landingPage/cardProduct";
 import { Category } from "../components/landingPage/cardCategory";
 import { CartCard } from "../components/landingPage/cartDetail";
+
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 
@@ -11,6 +12,7 @@ export const Homepage = () => {
   const token = localStorage.getItem("token")
 
   useEffect(() => {}, [reload])
+
 
   return token ? (
     <Center minH="100vh" bg={"green.50"}>
