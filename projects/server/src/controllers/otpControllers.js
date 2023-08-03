@@ -67,6 +67,7 @@ module.exports = {
       const payload = { id: result.id };
       const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1d" });
       res.status(200).send({
+        result,
         status: true,
         message: "Login success",
         token,

@@ -16,7 +16,8 @@ import { UsernameLogin } from "../components/logins/usernameLogin";
 import { EmailLogin } from "../components/logins/emailLogin";
 import { PhoneLogin } from "../components/logins/phoneLogin";
 import { OTPLogin } from "../components/logins/otpLogin";
-
+import { useDispatch } from "react-redux";
+import { setValue } from "../redux/cashierSlice";
 
 const CustomRadioButton = ({ icon, value, isChecked, onChange }) => (
   <Box
@@ -49,12 +50,13 @@ export const Login = () => {
     setLoginMethod(value);
   };
 
+  const dispatch = useDispatch()
   const handleSubmit = async (data) => {
-
     try {
       const response = await Axios.post("http://localhost:8000/api/auth/login", data);
       console.log(response);
       localStorage.setItem("token", response.data.token);
+      dispatch(setValue(response.data.result))
       toast({
         title: "Login Successful",
         description: "You have successfully logged in.",
@@ -63,11 +65,10 @@ export const Login = () => {
         isClosable: true,
         position: "top",
       });
-
       setTimeout(() => {
       }, 1000);
       navigate("/");
-      window.location.reload()
+      
 
     } catch (error) {
       console.log(error);

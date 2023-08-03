@@ -20,7 +20,7 @@ export const Category = () => {
     try {
       const response = await Axios.get('http://localhost:8000/api/categories');
       console.log(response);
-      setCategories(response.data);
+      setCategories(response.data.result);
     } catch (error) {
       console.log(error);
     }
