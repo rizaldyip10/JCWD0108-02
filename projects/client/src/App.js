@@ -20,9 +20,7 @@ import { DashboardCashier } from "./components/admin/dashboardCashier";
 import { TransHistory } from "./pages/transHistory";
 import { AdminReport } from "./components/dashboard/report/transTable";
 
-function App() {
 const router = createBrowserRouter([
-  
   { path: "/login", element: <Login /> },
   { path: "/forgotpass", element: <ForgotPassword /> },
   { path: '/admin', element: <AdminDashboard />, children: [
@@ -30,8 +28,8 @@ const router = createBrowserRouter([
     { path: 'cashier', element: <Cashier />},
     { path: 'report', element: <AdminReport />}
   ]},
-  {path:"/", element:<Navbar onSearchQueryChange={handleSearchQueryChange} />, children:[
-    {path: "/",element:<Homepage searchQuery={searchQuery}/>},
+  {path:"/", element:<Navbar/>, children:[
+    {path: "/",element:<Homepage/>},
     {path: "detail",element:<Detailpage/>},
     {path: "create",element:<CreateProduct/>},
     {path: "transaction",element: <TransHistory />}
@@ -39,27 +37,17 @@ const router = createBrowserRouter([
   ]},
   { path: "/resetpass/:token", element: <ResetPassword /> },
   { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
-  { path: "/footer", element: <Footer /> },
-   { path: '/admin', element: <AdminDashboard />, children: [
-      { path: '', element: <AdminHome />},
-      { path: 'cashier', element: <Cashier />}
-   ]},
-   
-    {path:"/",
-    element:<Navbar/>,
-    children:[
-      {path: "/",element:<Homepage searchQuery={searchQuery} />},
-    ]
-  },
-  {path: "/dashboardproduct",element:<DashboardProduct/>},
-  {path: "/dashboardcashier",element:<DashboardCashier/>},
-    ]
-)
-  
-  const token = localStorage.getItem("token");
-  const [searchQuery, setSearchQuery] = useState('');
+  {path:"/", element: <Navbar/>, children:[
+    {path: "/",element:<Homepage/>},
+  ]
+},
+{path: "/dashboard",element:<DashboardProduct/>},
+{path: "/cashier",element:<DashboardCashier/>},
+]);
 
-  
+function App() {
+  const token = localStorage.getItem("token");
+ 
   const headers = {
     Authorization: `Bearer ${token}`,
   };

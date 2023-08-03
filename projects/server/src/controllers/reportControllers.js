@@ -14,20 +14,22 @@ module.exports = {
             const dateEnd = req.query.dateEnd
             const condition = {}
             
+
             if (search) {
-                condition[Op.or] = [{ productName: { [Op.like]: `%${search}%` } }];
+                condition[Op.or] = [{ id: { [Op.like]: `%${search}%` } }];
+              
             }
             if (dateStart || dateEnd) {
-                condition.createdAt = {
-                    [Op.between]: [new Date(dateStart), new Date(dateEnd)]
-                  }
-            }
+                condition.createdAt = {[Op.and]: {
+                    [Op.gte]: new Date(dateStart).toLocaleDateString(),
+                    [Op.lte]: new Date(dateEnd).toLocaleDateString()
+                }}}
 
             const result = await Transaction.findAll({
                 attributes: ['id', 'createdAt', 'CashierId', 'amount'],
                 include: [{
                     model: Cashier,
-                    attributes: ['id', 'username', 'firstName', 'lastName']
+                    attributes: ['id', 'username', 'firstName', 'lastName'],
                 },{
                     model: transactionDetail,
                     attributes: ['totalItems', 'ProductId', 'totalPrice'],
@@ -42,7 +44,6 @@ module.exports = {
                 order: [
                     [sortBy, sort]
                 ],
-                subQuery: false
             })
             const total = await Transaction.count({ where: condition })
 
@@ -54,6 +55,7 @@ module.exports = {
                 result,
             })
         } catch (error) {
+            console.log(error);
             res.status(400).send(error)
         }
     }
