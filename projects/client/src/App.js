@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     { path: 'report', element: <AdminReport />}
   ]},
   {path:"/", element:<Navbar onSearchQueryChange={handleSearchQueryChange} />, children:[
-    {path: "/",element:<Homepage/>},
+    {path: "/",element:<Homepage searchQuery={searchQuery}/>},
     {path: "detail",element:<Detailpage/>},
     {path: "create",element:<CreateProduct/>},
     {path: "transaction",element: <TransHistory />}
