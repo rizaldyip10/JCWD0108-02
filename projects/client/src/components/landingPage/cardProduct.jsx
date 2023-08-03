@@ -11,6 +11,10 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
     const currentPage = parseInt(searchParams.get('page'), 10) || 1;
     return currentPage;
   };
+  const getSortOptionFromURL = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get('sort') || 'productName'; 
+  };
   const showCounterComponent = products && products.length > 0
 
 
@@ -18,7 +22,7 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
   const [currentPage, setCurrentPage] = useState(getCurrentPageFromURL());
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalPage, setTotalPage] = useState(1);
-  const [sortOption, setSortOption] = useState('productName');
+  const [sortOption, setSortOption] = useState(getSortOptionFromURL());
   const navigate = useNavigate();
 
   const getProducts = async (page, limit, category, sortField, query) => {
@@ -33,6 +37,7 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
       console.log(error);
     }
   };
+  
 
   const handleSortChange = (event) => {
     const sortValue = event.target.value;

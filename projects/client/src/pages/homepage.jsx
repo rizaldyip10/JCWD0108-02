@@ -6,11 +6,20 @@ import { CartCard } from "../components/landingPage/cartDetail";
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 
-export const Homepage = () => {
+export const Homepage = ({ searchQuery }) => {
   const [reload, setReload] = useState(true)
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
+  const location = useLocation();
 
+
+  const queryParams = new URLSearchParams(location.search);
+  const selectedCategory = queryParams.get('catId');
+
+  const handleCategoryClick = (category) => {
+    queryParams.set('catId', category);
+    navigate(`/?${queryParams.toString()}`);
+  };
   useEffect(() => {}, [reload])
 
 
@@ -38,7 +47,7 @@ export const Homepage = () => {
           </Box>
         </Box>
         <Flex justifyContent="center" h="100%">
-          <CartCard reload={reload} setReload={setReload} />
+          <CartCard reload={reload} setReload={setReload} selectedCategory={selectedCategory} searchQuery={searchQuery}/>
         </Flex>
       </Flex>
     </Center>

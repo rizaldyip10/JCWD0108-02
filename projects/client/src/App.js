@@ -21,12 +21,7 @@ import { TransHistory } from "./pages/transHistory";
 import { AdminReport } from "./components/dashboard/report/transTable";
 import "./App.css"
 
-function App() {
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearchQueryChange = (query) => {
-    setSearchQuery(query);
-  };
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
