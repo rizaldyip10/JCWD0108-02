@@ -6,6 +6,9 @@ import {
 import { EditProduct } from './editProduct';
 import { ChangeProfilePicture } from './imgProfle';
 
+import { ChangeProfilePicture } from './imgProfle';
+
+
 export const EditModal = ({ isOpen, onClose, selectedProduct, onSave, categories }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

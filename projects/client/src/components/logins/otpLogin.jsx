@@ -14,11 +14,13 @@ import {
   useToast
 } from "@chakra-ui/react";
 import Axios from "axios";
-
+import { useDispatch } from "react-redux";
+import { setValue } from "../../redux/cashierSlice";
 export const OTPLogin = () => {
   const [email, setEmail] = useState("");
   const [showOTP, setShowOTP] = useState(false); 
   const toast = useToast()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const emailSchema = Yup.object().shape({
     email: Yup.string()
@@ -70,6 +72,7 @@ export const OTPLogin = () => {
       );
       console.log(response);
       localStorage.setItem("token", response.data.token);
+      dispatch(setValue(response.data.result))
       toast({
         title: "Login Successful",
         description: "You have successfully logged in.",
@@ -78,7 +81,12 @@ export const OTPLogin = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/")
+
+      setTimeout(() => {
+      }, 1000);
+      navigate("/");
+
+
     } catch (error) {
       console.log(error);
       toast({

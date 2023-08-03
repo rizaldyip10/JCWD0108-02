@@ -9,7 +9,7 @@ import { Homepage } from './pages/homepage';
 import { Navbar } from './components/landingPage/navbar';
 import { Detailpage } from './pages/detailpage';
 import { CreateProduct } from './components/admin/createProduct';
-// import { DashboardProduct } from './components/admin/dashboardProduct';
+import { DashboardProduct } from './components/admin/dashboardProduct';
 import { useEffect, useState } from "react";
 import { AdminDashboard } from "./pages/adminDashboard";
 import { Cashier } from "./components/dashboard/manageCashier/cashier";
@@ -20,6 +20,13 @@ import { DashboardCashier } from "./components/admin/dashboardCashier";
 import { TransHistory } from "./pages/transHistory";
 import { AdminReport } from "./components/dashboard/report/transTable";
 import "./App.css"
+
+function App() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
+  };
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');

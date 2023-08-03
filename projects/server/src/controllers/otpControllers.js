@@ -21,6 +21,8 @@ module.exports = {
       const { email } = req.body;
       const isAccountExist = await cashier.findOne({ where: { email } });
       if (isAccountExist == null) throw { message: "Account not found" };
+      if (isAccountExist.isBanned) throw{message:"Account is suspend"}
+      if (isAccountExist.isDeleted) throw{message:"Account not found"}
       const isOtpExist = await otp_.findOne({where: {CashierId:isAccountExist.id}})
       if (isOtpExist) throw {message:"OTP is already sent to your email"}
       const otpNumber = generateRandomFourDigits();
@@ -67,6 +69,7 @@ module.exports = {
       const payload = { id: result.id };
       const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1d" });
       res.status(200).send({
+        result,
         status: true,
         message: "Login success",
         token,
