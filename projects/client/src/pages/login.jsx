@@ -65,10 +65,12 @@ export const Login = () => {
         isClosable: true,
         position: "top",
       });
+
       setTimeout(() => {
       }, 1000);
       navigate("/");
       
+
 
     } catch (error) {
       console.log(error);

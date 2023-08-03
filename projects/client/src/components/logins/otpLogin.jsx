@@ -85,7 +85,7 @@ export const OTPLogin = () => {
       setTimeout(() => {
       }, 1000);
       navigate("/");
-      
+
 
     } catch (error) {
       console.log(error);
