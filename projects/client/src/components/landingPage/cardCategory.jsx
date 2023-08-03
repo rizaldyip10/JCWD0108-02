@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import Axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { PaginationControls } from '../pagination'; // Import PaginationControls component
 
 export const Category = ({ onSelectCategory }) => {
   const [categories, setCategories] = useState([]);
