@@ -7,5 +7,6 @@ router.get("/income", reportControllers.profit)
 router.get("/order", reportControllers.todayOrder)
 router.get("/product", reportControllers.topProduct)
 router.get("/totalCashier", reportControllers.totalCashier)
+router.get("/daySales", reportControllers.daySales)
 
 module.exports = router

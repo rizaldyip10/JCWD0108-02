@@ -1,5 +1,7 @@
 const productControllers = require('../controllers/productControllers')
 const router = require('express').Router()
+const { multerUpload } = require('../middlewares/multer')
+
 
 const { multerUpload } = require('../middlewares/multer')
 

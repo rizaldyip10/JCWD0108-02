@@ -1,10 +1,15 @@
-import { Box, Button, Flex, Input, Select, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Flex, Input, Link, Select, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, useDisclosure } from "@chakra-ui/react"
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { DateSelect } from "../../transHistory/dateSelect";
 import { DetailModal } from "../../transHistory/modalDetail";
+import { saveAs } from "file-saver"
+import ReactPDF from '@react-pdf/renderer';
+import generatePDFContent from "./salesReport";
+import PDFViewerComponent from "./pdfRenderer";
+
 
 
 export const AdminReport = ({ reload, setReload }) => {
@@ -66,6 +71,12 @@ export const AdminReport = ({ reload, setReload }) => {
           setCurrentPage(newPage);
         }
       };
+
+      const generatePDF = (data) => {
+        const pdfContent = generatePDFContent(data);
+        const blob = new Blob([pdfContent], { type: 'application/pdf' });
+        saveAs(blob, 'admin_report.pdf');
+      };
     useEffect(() => {
         getOrder(currentPage, itemsPerPage, startDate, endDate, sort, sortBy, searchTerm,)
     },[currentPage, itemsPerPage, startDate, endDate, sort, sortBy, searchTerm, reload])
@@ -89,7 +100,7 @@ export const AdminReport = ({ reload, setReload }) => {
                     </Select>
                 </Flex>
             </Flex>
-            <Flex direction={{ base: "column", lg: "row"}}>
+            <Flex direction={{ base: "column", md: "row"}}>
                 <DateSelect selected={startDate} onChange={(date) => {
                     setStartDate(date)
                     setReload(!reload)
@@ -159,6 +170,8 @@ export const AdminReport = ({ reload, setReload }) => {
                 <ArrowForwardIcon color={"white"}></ArrowForwardIcon>
                 </Button>
             </Box>
+            <Link onClick={() => generatePDF(order)}>Download Sales Report</Link>
+            {/* {order && <PDFViewerComponent data={order} />} */}
         </Flex>
     )
 }

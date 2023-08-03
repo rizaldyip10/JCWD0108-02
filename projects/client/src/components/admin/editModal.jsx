@@ -4,6 +4,7 @@ import {
   ModalCloseButton, ModalBody, ModalFooter, Button
 } from '@chakra-ui/react';
 import { EditProduct } from './editProduct';
+import { ChangeProfilePicture } from './imgProfle';
 
 import { ChangeProfilePicture } from './imgProfle';
 

@@ -28,7 +28,7 @@ export const RecentTrans = () => {
             <Heading fontSize="22px">Recent Order</Heading>
             <TableContainer bgColor="white" boxShadow="1px 1px 3px black" mt="20px"
             borderRadius="5px">
-                <Table size={{ base: 'sm', lg: 'lg'}} w={{base: "300px", lg: "700px"}}>
+                <Table size={{ base: 'sm', md: 'md', lg: 'lg'}}>
                     <Thead>
                         <Tr>
                             <Th>Order ID</Th>
