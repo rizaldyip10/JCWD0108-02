@@ -11,8 +11,6 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
     const currentPage = parseInt(searchParams.get('page'), 10) || 1;
     return currentPage;
   };
-  const showCounterComponent = products && products.length > 0
-
 
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(getCurrentPageFromURL());
@@ -21,18 +19,22 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
   const [sortOption, setSortOption] = useState('productName');
   const navigate = useNavigate();
 
+  const showCounterComponent = products && products.length > 0
+
   const getProducts = async (page, limit, category, sortField, query) => {
     try {
       const response = await Axios.get(
-        `http://localhost:8000/api/products?page=${page}&limit=${limit}&catId=${category}&sortField=${sortField}&search=${query}`
+        `http://localhost:8000/api/products?page=${page}&limit=${limit}&catId=${category}&sortField=${sortField}`
       );
       const { result, totalPage: totalPages } = response.data;
       setProducts(result);
       setTotalPage(totalPages);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   const handleSortChange = (event) => {
     const sortValue = event.target.value;
@@ -49,11 +51,8 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
 
   useEffect(() => {
     getProducts(currentPage, itemsPerPage, selectedCategory, sortOption, searchQuery);
-  }, [currentPage, itemsPerPage, selectedCategory, sortOption, searchQuery]);
-
-  useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery]);
+  }, [currentPage, itemsPerPage, selectedCategory, sortOption, searchQuery]);
 
   return (
     <>
@@ -70,6 +69,7 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
               setSortOption(sortValue);
               navigate(`/?sort=${sortValue}`, { replace: true });
             }}
+            maxW="350px"
           >
             <option value="productName">Sort by Name (A-Z)</option>
             <option value="productNameDESC">Sort by Name (Z-A)</option>
@@ -115,13 +115,13 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
                   <Heading fontSize="sm" fontFamily="body" fontWeight={500} color="green">
                     {item.productPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
                   </Heading>
-                  {showCounterComponent && <Counter id={item.id} reload={reload} setReload={setReload} />}
+                  {showCounterComponent && !item.isDeleted ? <Counter id={item.id} reload={reload} setReload={setReload} /> : <Box></Box>}
                 </Stack>
               </Box>
             );
           })}
         </SimpleGrid>
-        <Box mt="5" display="flex" justifyContent="center" alignItems="center">
+        <Box mt="10" display="flex" justifyContent="center" alignItems="center">
           <PaginationControls currentPage={currentPage} totalPage={totalPage} handlePageChange={handlePageChange} />
         </Box>
         <style jsx>{`

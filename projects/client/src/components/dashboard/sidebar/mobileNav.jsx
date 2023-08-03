@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, HStack, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, VStack, useColorModeValue } from "@chakra-ui/react";
+import { Avatar, Box, Flex, HStack, IconButton, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, VStack, useColorModeValue } from "@chakra-ui/react";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -32,16 +32,8 @@ export const MobileNav = ({ onOpen, ...rest }) => {
           aria-label="open menu"
           icon={<FiMenu />}
         />
-  
-        <Text
-          display={{ base: 'flex', lg: 'none' }}
-          fontSize="2xl"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Logo
-        </Text>
-  
+        <Image src="https://media.discordapp.net/attachments/1133287275015446530/1136147280282538084/veganers-high-resolution-logo-color-on-transparent-background.png?width=582&height=655"
+          w="60px" display={{ base: 'flex', lg: 'none' }} />
         <HStack spacing={{ base: '0', lg: '6' }}>
           <Flex alignItems={'center'}>
             <Menu>
