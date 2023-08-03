@@ -12,11 +12,19 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
     return currentPage;
   };
 
+  const getSortOptionFromURL = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get('sort') || 'productName'; 
+  };
+
+  const showCounterComponent = products && products.length > 0
+
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(getCurrentPageFromURL());
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalPage, setTotalPage] = useState(1);
-  const [sortOption, setSortOption] = useState('productName');
+
+  const [sortOption, setSortOption] = useState(getSortOptionFromURL());
   const navigate = useNavigate();
 
   const showCounterComponent = products && products.length > 0
