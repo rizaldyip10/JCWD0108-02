@@ -43,6 +43,8 @@ module.exports = {
       const password = req.body.password;
       const result = await cashier.findOne({ where: {[Op.or]:[{username},{email},{phone}]}});
       if (result == null) throw{message:"Account not found"}
+      if (result.isBanned) throw{message:"Account is suspend"}
+      if (result.isDeleted) throw{message:"Account is deleted"}
       const isValid = await bcrypt.compare(password, result.password)
       if (!isValid) throw { message: "Wrong password" };
       const payload = {id:result.id}
