@@ -78,7 +78,12 @@ export const OTPLogin = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/")
+
+      setTimeout(() => {
+      }, 1000);
+      navigate("/");
+      window.location.reload()
+
     } catch (error) {
       console.log(error);
       toast({
