@@ -163,5 +163,23 @@ module.exports = {
         } catch (error) {
             res.status(400).send(error)
         }
+    },
+    daySales: async (req, res) => {
+        try {
+            const result = await Transaction.findAll({
+              attributes: [
+                [sequelize.fn('date', sequelize.col('createdAt')), 'date'],
+                [sequelize.fn('sum', sequelize.col('amount')), 'totalAmount'],
+              ],
+              group: [sequelize.fn('date', sequelize.col('createdAt'))],
+              order: [[sequelize.fn('date', sequelize.col('createdAt')), 'DESC']],
+              limit: 7
+            });
+        
+            res.status(200).send(result);
+          } catch (error) {
+            console.log(error);
+            res.status(400).send(error);
+          }
     }
 }

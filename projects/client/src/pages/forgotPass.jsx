@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Flex,
   Box,
@@ -9,6 +9,7 @@ import {
   Button,
   Heading,
   Text,
+  useToast, // Import the useToast hook
 } from "@chakra-ui/react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
@@ -18,6 +19,9 @@ import ReCAPTCHA from "react-google-recaptcha";
 export const ForgotPassword = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   
+
+  const toast = useToast(); 
+
   const handleSubmit = async (data) => {
     try {
       const response = await Axios.put(
@@ -25,14 +29,29 @@ export const ForgotPassword = () => {
         data
       );
       console.log(response);
+      toast({
+        title: "Success",
+        description: "Password reset link sent to your email.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Error",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      
     }
   };
+
   const forgotSchema = Yup.object().shape({
-    email: Yup.string()
-      .required("Email is required")
-      .email("Invalid email format"),
+    email: Yup.string().required("Email is required").email("Invalid email format"),
   });
 
   useEffect(() => {
@@ -98,22 +117,16 @@ export const ForgotPassword = () => {
                     _placeholder={{ color: "gray.500" }}
                   />
                 </FormControl>
-                <ErrorMessage
-                  style={{ color: "red" }}
-                  name="email"
-                  component="div"
-                />
+                <ErrorMessage style={{ color: "red" }} name="email" component="div" />
                 <Stack spacing={6}>
                   <Box mt={4} w="100%" mx="auto">
-                      <Flex justify={"center"} align={"center"}>
-                        <ReCAPTCHA
-                          sitekey={"6Lc05mgnAAAAAAwI0woSJin3hN9d-FymlUvqssLo"}
-                          onChange={(value) =>
-                            props.setFieldValue("recaptcha", value)
-                          }
-                        />
-                      </Flex>
-                    </Box>
+                    <Flex justify={"center"} align={"center"}>
+                      <ReCAPTCHA
+                        sitekey={"6Lc05mgnAAAAAAwI0woSJin3hN9d-FymlUvqssLo"}
+                        onChange={(value) => props.setFieldValue("recaptcha", value)}
+                      />
+                    </Flex>
+                  </Box>
                   <Button
                     bg={"green.400"}
                     color={"white"}
@@ -121,7 +134,7 @@ export const ForgotPassword = () => {
                       bg: "green.500",
                     }}
                     isLoading={props.isSubmitting}
-                    isDisabled={!props.dirty || !props.isValid || !props.values.recaptcha} 
+                    isDisabled={!props.dirty || !props.isValid || !props.values.recaptcha}
                     type="submit"
                   >
                     Request Reset

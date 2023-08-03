@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 import { Searchbar } from "./searchbar";
-import { BsCart4 } from "react-icons/bs";
-import { Outlet } from "react-router-dom";
+import { GrDocumentText } from "react-icons/gr";
+import { Link, Outlet } from "react-router-dom";
 import { AvatarMenu } from "../avatar/avatar";
 
 const logo ="https://i.ibb.co/yBWXpX3/veganers-high-resolution-logo-white-on-transparent-background.png"
@@ -22,11 +22,14 @@ export const Navbar = ({onSearchQueryChange }) => {
         boxShadow="md"
         zIndex={3}
       >
-
-        <Image src={logo} w={"60px"}/>
+        <Box as={Link}>
+          <Image src={logo} w={"60px"} />
+        </Box>
         <Searchbar onSearchQueryChange={onSearchQueryChange} />
         <HStack spacing={4}>
-          <BsCart4 size={24} style={{ cursor: "pointer" }} />
+          <Box as={Link} to={"/transaction"} color="white">
+            <GrDocumentText size={24} style={{ cursor: "pointer" }} />
+          </Box>
           <AvatarMenu/>
         </HStack>
       </Flex>
