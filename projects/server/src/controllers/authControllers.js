@@ -48,7 +48,7 @@ module.exports = {
       const isValid = await bcrypt.compare(password, result.password)
       if (!isValid) throw { message: "Wrong password" };
       const payload = {id:result.id}
-      const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1d" })
+      const token = jwt.sign(payload, "minpro3", { expiresIn: "1d" })
       res.status(200).send({
         status: true,
         message: "Login success",

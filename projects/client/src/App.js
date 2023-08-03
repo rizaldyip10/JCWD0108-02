@@ -19,6 +19,14 @@ import { ChangeProfilePicture } from "./components/imgProfle";
 import { DashboardCashier } from "./components/admin/dashboardCashier";
 import { TransHistory } from "./pages/transHistory";
 import { AdminReport } from "./components/dashboard/report/transTable";
+import "./App.css"
+
+function App() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
+  };
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -28,8 +36,8 @@ const router = createBrowserRouter([
     { path: 'cashier', element: <Cashier />},
     { path: 'report', element: <AdminReport />}
   ]},
-  {path:"/", element:<Navbar/>, children:[
-    {path: "/",element:<Homepage/>},
+  {path:"/", element:<Navbar onSearchQueryChange={handleSearchQueryChange}/>, children:[
+    {path: "/",element:<Homepage searchQuery={searchQuery}/>},
     {path: "detail",element:<Detailpage/>},
     {path: "create",element:<CreateProduct/>},
     {path: "transaction",element: <TransHistory />}
@@ -37,26 +45,13 @@ const router = createBrowserRouter([
   ]},
   { path: "/resetpass/:token", element: <ResetPassword /> },
   { path: "/changeprofilepicture", element: <ChangeProfilePicture /> },
-  {
-    path: "/admin",
-    element: <AdminDashboard />,
-    children: [
-      { path: "", element: <AdminHome /> },
-      { path: "cashier", element: <Cashier /> },
-    ],
-  },
-  {path:"/",
-  element:<Navbar/>,
-  children:[
+  {path:"/", element: <Navbar/>, children:[
     {path: "/",element:<Homepage/>},
   ]
 },
-{path: "/dashboard",element:<DashboardProduct/>},
 {path: "/cashier",element:<DashboardCashier/>},
 ]);
 
-
-function App() {
   const token = localStorage.getItem("token");
  
   const headers = {

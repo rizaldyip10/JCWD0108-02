@@ -4,13 +4,14 @@ import { BsCart4 } from "react-icons/bs";
 import { Outlet } from "react-router-dom";
 import { AvatarMenu } from "../avatar/avatar";
 
-const logo = "https://i.ibb.co/ZhZssqF/logomcd.png"
+const logo ="https://i.ibb.co/yBWXpX3/veganers-high-resolution-logo-white-on-transparent-background.png"
 
-export const Navbar = () => {
+export const Navbar = ({onSearchQueryChange }) => {
   return (
     <Box>
       <Flex
         bg="green"
+        mb={5}
         color="white"
         w="100%"
         h={16}
@@ -22,8 +23,8 @@ export const Navbar = () => {
         zIndex={3}
       >
 
-        <Image src={logo} w={20}/>
-        <Searchbar />
+        <Image src={logo} w={"60px"}/>
+        <Searchbar onSearchQueryChange={onSearchQueryChange} />
         <HStack spacing={4}>
           <BsCart4 size={24} style={{ cursor: "pointer" }} />
           <AvatarMenu/>
