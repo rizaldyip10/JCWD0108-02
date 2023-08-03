@@ -17,7 +17,6 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
     return searchParams.get('sort') || 'productName'; 
   };
 
-
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(getCurrentPageFromURL());
   const [itemsPerPage, setItemsPerPage] = useState(10);
