@@ -124,7 +124,7 @@ export const EditProduct = ({ product, onSave, categories }) => {
       <Select
         name="selectedCategory"
         value={formik.values.selectedCategory}
-        defaultValue={categories[0].id}
+        defaultValue={categories.id}
         onChange={(e) => handleFieldChange(e, 'selectedCategory')}
         disabled={!editMode}
       >

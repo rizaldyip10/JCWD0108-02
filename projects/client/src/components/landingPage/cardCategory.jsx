@@ -42,8 +42,8 @@ export const Category = ({ onSelectCategory }) => {
   };
 
   useEffect(() => {
-    getCategories(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage]);
+    getCategories();
+  }, []);
 
   return (
     <Box>
