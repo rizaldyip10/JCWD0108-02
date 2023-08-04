@@ -5,7 +5,7 @@ export const BanCashier = ({ cashierId, isBanned}) => {
     const banCashier = async (id) => {
     try {
       console.log(id);
-      const response = await Axios.delete(`http://localhost:8000/api/users/${id}`);
+      const response = await Axios.delete(`http://localhost:8000/api/auth/${id}`);
       console.log(response);
       window.location.reload()
     }

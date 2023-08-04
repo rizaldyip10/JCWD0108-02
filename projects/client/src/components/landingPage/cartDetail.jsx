@@ -111,41 +111,43 @@ export const CartCard = ({ reload, setReload}) => {
     }, [reload])
 
     return items?.length > 0 ? (
-        <Box bg="white" w="400px" h="100%" p="20px"
+        <Box bg="white" w="400px" h="100%" p="20px" ml="20px"
         borderRadius="15px" boxShadow="1px 1px 3px black" mt="50px">
             <Heading fontSize="24px">Order Detail</Heading>
                     {items?.map((item, index) => {
                         return (
                             <Flex mt="15px" key={index}>
-                                <Image w="100px" h="100px" src={item.Product.productImage} objectFit="cover" />
+                                <Image w="100px" h="100px" src={`http://localhost:8000/${item?.Product.productImage}`} objectFit="cover" />
                                 <Box ml="10px">
-                                    <Text fontSize="16px" fontWeight="bold">{item.Product.productName}</Text>
-                                    <Flex mt="4" alignItems="center">
-                                        <IconButton
-                                        icon={<AiOutlineMinus />}
-                                        onClick={item.totalItems === 1 ? () => handleDelete(item.id) : () => decreaseQuantity(item.id)}
-                                        borderRadius="50%"
-                                        size="sm"
-                                        />
-                                        <Text display="inline-block" mx={2}>
-                                        {item.totalItems}
-                                        </Text>
-                                        <IconButton
-                                        icon={<AiOutlinePlus />}
-                                        onClick={() => increaseQuantity(item.id)}
-                                        borderRadius="50%"
-                                        size="sm"
-                                        />
-                                        <Text ml="10px" fontWeight="bold">
+                                    <Text fontSize="16px" fontWeight="bold">{item?.Product.productName}</Text>
+                                    <Flex mt="4" alignItems="center" direction={{ base: "column", lg: "row" }}>
+                                        <Flex>
+                                            <IconButton
+                                            icon={<AiOutlineMinus />}
+                                            onClick={item.totalItems === 1 ? () => handleDelete(item.id) : () => decreaseQuantity(item.id)}
+                                            borderRadius="50%"
+                                            size="sm"
+                                            />
+                                            <Text display="inline-block" mx={2}>
+                                            {item.totalItems}
+                                            </Text>
+                                            <IconButton
+                                            icon={<AiOutlinePlus />}
+                                            onClick={() => increaseQuantity(item.id)}
+                                            borderRadius="50%"
+                                            size="sm"
+                                            />
+                                            <IconButton
+                                            icon={<BsFillTrashFill />}
+                                            onClick={() => handleDelete(item.id)}
+                                            borderRadius="50%"
+                                            size="sm"
+                                            ml="10px"
+                                            />
+                                        </Flex>
+                                        <Text mt={{ base: "15px", lg: "0"}} ml={{ base: "0px", lg: "20px"}} fontWeight="bold">
                                             {formatIDR(item.Product.productPrice * item.totalItems)}
                                         </Text>
-                                        <IconButton
-                                        icon={<BsFillTrashFill />}
-                                        onClick={() => handleDelete(item.id)}
-                                        borderRadius="50%"
-                                        size="sm"
-                                        ml="10px"
-                                        />
                                     </Flex>
                                 </Box>
                             </Flex>
@@ -155,7 +157,7 @@ export const CartCard = ({ reload, setReload}) => {
             <Payment totalPrice={totalPrice} reload={reload} setReload={setReload} />
         </Box>
     ) : (
-        <Flex bg="white" w="400px" h="100%" p="20px" justifyContent="center"
+        <Flex bg="white" w="400px" h="100%" p="20px" justifyContent="center" ml="20px"
         borderRadius="15px" boxShadow="1px 1px 3px black" mt="50px" justify="center"
         align="center" direction="column">
             <Image maxW="200px" src="https://img.freepik.com/free-vector/shopping-cart-realistic_1284-6011.jpg?w=2000"/>

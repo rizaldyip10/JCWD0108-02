@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 
-
+console.log(process.env.KEY_JWT);
 const { categoryRouters, productRouters, authRouters, transactionRouters, reportRouters, otpRouters } = require('./routers')
 const db = require('./models');
 

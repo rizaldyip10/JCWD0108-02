@@ -14,7 +14,7 @@ export const DashboardCashier = () => {
 
   const getCashiers = async () => {
     try {
-      const response = await Axios.get('http://localhost:8000/api/users');
+      const response = await Axios.get('http://localhost:8000/api/auth');
       setCashiers(response.data.result);
     } catch (error) {
       console.log(error);
@@ -40,8 +40,8 @@ export const DashboardCashier = () => {
   };
 
   return (
-    <Box>
-      <AddCashierButton />
+    <Box bg={'green.50'}>
+      <AddCashierButton/>
       <TableContainer>
         <Table>
           <Thead>
@@ -60,9 +60,10 @@ export const DashboardCashier = () => {
               <Tr key={item.id}>
                 <Td>
                   <Flex alignItems="center">
-                    <Avatar size="sm" />
+                    <Avatar size="sm" src={`http://localhost:8000/${item.imgProfile}`}name={item.username} />
                     <Box ml="10px">
                       <Text fontWeight="bold" fontSize="14px">{item.username}</Text>
+                      <Text fontSize="14px">{item.firstName} {item.lastName}</Text>
                       <Text fontSize="14px">{item.email}</Text>
                     </Box>
                   </Flex>

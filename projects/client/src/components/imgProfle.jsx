@@ -30,7 +30,7 @@ export const ChangeProfilePicture = () => {
       const formData = new FormData();
       formData.append("file", file);
       const response = await Axios.post(
-        "http://localhost:8000/auth/profpic",
+        "http://localhost:8000/api/auth/profilePicture",
         formData,
         { headers }
       );

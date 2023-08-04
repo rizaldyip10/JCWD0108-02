@@ -180,7 +180,7 @@ export const ResetPassword = () => {
                     _hover={{
                       bg: "green.500",
                     }}
-                    isLoading={props.isSubmitting}
+                    
                     isDisabled={!props.dirty || !props.isValid || !props.values.recaptcha}
                     type="submit"
                   >

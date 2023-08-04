@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack, Text, useToast } from "@chakra-ui/react";
 import Axios from "axios";
 import { useState } from "react";
 
@@ -6,6 +6,7 @@ export const Counter = ({ id, reload, setReload }) => {
     const [quantity, setQuantity] = useState(1);
     const [isBuying, setIsBuying] = useState(false);
     const TOKEN = localStorage.getItem("token")
+    const toast = useToast()
 
     const handleBuyClick = () => {
      setIsBuying(true);
@@ -31,7 +32,14 @@ export const Counter = ({ id, reload, setReload }) => {
       })
       setReload(!reload)
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Failed",
+        description: "Oops.. There is something wrong",
+        status: 'error',
+        duration: 1500,
+        isClosable: true,
+        position: "top"
+      })
     }
   };
     return(

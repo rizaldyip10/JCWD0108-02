@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Center, Heading, Text, Stack, Image, Flex, HStack, SimpleGrid } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Text, Stack, Image, Flex, HStack, SimpleGrid, Select } from '@chakra-ui/react';
 import Axios from 'axios';
 import { DeactivateProduct } from './deactivateProduct';
 import { EditIcon } from '@chakra-ui/icons';
@@ -9,6 +9,7 @@ import { PaginationControls } from '../pagination';
 import { AddProductButton } from './addProductButton';
 import { AddCategoryButton } from './addCategoryButton';
 import { DashboardCategory } from './dashboardCategory';
+import { Searchbar } from '../landingPage/searchbar';
 
 export const DashboardProduct = () => {
   const { id } = useParams();
@@ -22,10 +23,15 @@ export const DashboardProduct = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const queryParams = new URLSearchParams(location.search);
   const selectedCategory = queryParams.get('catId');
-
-  const getProducts = async (page, limit, category) => {
+  
+  const getSortOptionFromURL = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get('sort') || 'productName'; 
+  };
+  const [sortOption, setSortOption] = useState(getSortOptionFromURL());
+  const getProducts = async (page, limit, category,sortField) => {
     try {
-      const response = await Axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&=${id}&catId=${category}`);
+      const response = await Axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&=${id}&catId=${category}&sortField=${sortField}`);
       const { result, totalPage: totalPages } = response.data;
       setProducts(result);
       setTotalPage(totalPages);
@@ -43,13 +49,14 @@ export const DashboardProduct = () => {
   };
   const handleCategoryClick = (category) => {
     queryParams.set('catId', category);
-    navigate(`/dashboard?${queryParams.toString()}`);
+    navigate(`/admin/product?${queryParams.toString()}`);
   };
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPage && newPage !== currentPage) {
       setCurrentPage(newPage);
     }
   };
+
 
   const getCurrentPageFromURL = () => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -73,9 +80,9 @@ export const DashboardProduct = () => {
     setIsModalOpen(false);
   };
   useEffect(() => {
-    getProducts(currentPage, itemsPerPage, selectedCategory);
+    getProducts(currentPage, itemsPerPage, selectedCategory,sortOption);
     getCategories();
-  }, [currentPage, itemsPerPage, selectedCategory]);
+  }, [currentPage, itemsPerPage, selectedCategory,sortOption]);
   return (
     <Center bg={'green.50'}>
       <Box w={'90%'} py={10}>
@@ -84,6 +91,20 @@ export const DashboardProduct = () => {
         <DashboardCategory selectedCategory={selectedCategory} onSelectCategory={handleCategoryClick} />
         <Text size={'2xl'}>Product</Text>
         <AddProductButton />
+        <Select
+            value={sortOption}
+            onChange={(event) => {
+              const sortValue = event.target.value;
+              setSortOption(sortValue);
+              navigate(`/admin/product?sort=${sortValue}`, { replace: true });
+            }}
+            maxW="350px"
+          >
+            <option value="productName">Sort by Name (A-Z)</option>
+            <option value="productNameDESC">Sort by Name (Z-A)</option>
+            <option value="productPrice">Sort by Price (Low to High)</option>
+            <option value="productPriceDESC">Sort by Price (High to Low)</option>
+          </Select>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }} gap={5} mx={'auto'}>
           {products?.map((item) => (
             <Box

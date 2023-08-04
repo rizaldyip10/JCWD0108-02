@@ -6,7 +6,7 @@ export const DeleteCashier = ({ cashierId}) => {
     const deleteCashier = async (id) => {
     try {
       console.log(id);
-      const response = await Axios.put(`http://localhost:8000/api/users/${id}`);
+      const response = await Axios.put(`http://localhost:8000/api/auth/${id}`);
       console.log(response);
     }
     catch(error){

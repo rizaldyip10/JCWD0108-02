@@ -1,7 +1,14 @@
 import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react"
 import { SearchIcon } from "@chakra-ui/icons"
+import { useState } from "react";
 
-export const Searchbar = () => {
+export const Searchbar = ({ onSearchQueryChange }) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const handleSearchInputChange = (event) => {
+        const query = event.target.value;
+        setSearchQuery(query);
+        onSearchQueryChange(query);
+      };
     return (
         <InputGroup  w={"30%"}>
     <Input
@@ -9,8 +16,10 @@ export const Searchbar = () => {
     placeholder='Find Product' 
     w={"100%"} 
     bg={"white"} 
-    _placeholder={{color : "black"}}  
+    _placeholder={{color : "black"}}
     color={"black"}
+    value={searchQuery}
+    onChange={handleSearchInputChange}
     />
     <InputRightElement width='4.5rem'>
     <Button 
