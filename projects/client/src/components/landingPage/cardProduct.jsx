@@ -30,7 +30,7 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
   const getProducts = async (page, limit, category, sortField, query) => {
     try {
       const response = await Axios.get(
-        `http://localhost:8000/api/products?page=${page}&limit=${limit}&catId=${category}&sortField=${sortField}`
+        `http://localhost:8000/api/products?page=${page}&limit=${limit}&catId=${category}&sortField=${sortField}&search=${query}`
       );
       const { result, totalPage: totalPages } = response.data;
       setProducts(result);
@@ -57,12 +57,11 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
 
   useEffect(() => {
     getProducts(currentPage, itemsPerPage, selectedCategory, sortOption, searchQuery);
-    setCurrentPage(1);
   }, [currentPage, itemsPerPage, selectedCategory, sortOption, searchQuery]);
 
   return (
     <>
-      <Box>
+      <Box mr={4}>
         <Flex
           justifyContent="space-between"
           alignItems="center"
@@ -83,7 +82,7 @@ export const Product = ({ selectedCategory, searchQuery, reload, setReload }) =>
             <option value="productPriceDESC">Sort by Price (High to Low)</option>
           </Select>
         </Flex>
-        <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }} gap="4">
+        <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 4 }} gap="4">
           {products?.map((item) => {
             const cardClassName = item.isDeleted ? 'off' : '';
 

@@ -88,7 +88,7 @@ export const PhoneLogin = ({ handleSubmit }) => {
               </Text>
               <Button
                 colorScheme="green"
-                isLoading={props.isSubmitting}
+                
                 isDisabled={!props.dirty ||!props.isValid}
                 type="submit"
               >

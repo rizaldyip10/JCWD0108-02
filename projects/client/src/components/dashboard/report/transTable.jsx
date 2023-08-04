@@ -34,6 +34,7 @@ export const AdminReport = ({ reload, setReload }) => {
                 )
             setOrder(response.data.result)
             setTotalPage(response.data.totalPage)
+            console.log(response);
         } catch (error) {
             console.log(error);
         }

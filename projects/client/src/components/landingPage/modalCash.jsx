@@ -26,6 +26,7 @@ export const CashModal = ({ isOpen, onClose, totalPrice, reload, setReload })  =
                     Authorization: `Bearer ${TOKEN}`
                 }
             })
+            console.log(response);
             toast({
                 title: "Success",
                 description: "Transaction completed!",
@@ -34,7 +35,9 @@ export const CashModal = ({ isOpen, onClose, totalPrice, reload, setReload })  =
                 isClosable: true,
                 position: "top"
               })
-              setReload(!reload)
+              setTimeout(() => {
+                setReload(!reload)
+              },2000)
         } catch (error) {
             console.log(error);
             toast({

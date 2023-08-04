@@ -129,7 +129,7 @@ export const OTPLogin = () => {
               <VStack spacing={4} align="stretch">
                 <Button
                   colorScheme="blue"
-                  isLoading={props.isSubmitting}
+                  
                   isDisabled={!props.dirty || !props.isValid}
                   type="submit"
                 >
@@ -175,7 +175,7 @@ export const OTPLogin = () => {
                 </Checkbox>
                 <Button
                   colorScheme="green"
-                  isLoading={props.isSubmitting}
+                  
                   isDisabled={!props.dirty || !props.isValid}
                   type="submit"
                 >

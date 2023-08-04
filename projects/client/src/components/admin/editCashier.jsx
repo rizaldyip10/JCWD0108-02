@@ -42,11 +42,10 @@ export const EditCashier = ({ cashier, onSave }) => {
     try {
       const updatedCashier = { ...formik.values };
 
-      await Axios.patch(`http://localhost:8000/api/users/${cashier.id}`, updatedCashier);
+      await Axios.patch(`http://localhost:8000/api/auth/${cashier.id}`, updatedCashier);
 
       setEditMode(false);
-      setShowSuccessAlert(true); // Show the success alert
-      // Hide the success alert after a few seconds
+      setShowSuccessAlert(true); 
       setTimeout(() => setShowSuccessAlert(false), 3000);
     } catch (error) {
         console.log(error);
@@ -156,7 +155,7 @@ export const EditCashier = ({ cashier, onSave }) => {
           Edit
         </Button>
         )}
-        <ChangeProfilePicture/>
+        
     </Stack>
   );
 };

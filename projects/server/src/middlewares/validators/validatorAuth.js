@@ -27,12 +27,6 @@ module.exports = {
           "Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one symbol"
         )
         .run(req);
-      await body("confirmPassword")
-        .notEmpty()
-        .withMessage("Confirm password must not be empty")
-        .equals(req.body.password)
-        .withMessage("Passwords do not match")
-        .run(req);
       const validation = validationResult(req);
       if (validation.isEmpty()) {
         next();

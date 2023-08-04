@@ -7,7 +7,7 @@ export const SidebarContent = ({ onClose, ...rest }) => {
     const LinkItems = [
         { name: 'Home', icon: FiHome, page: "/admin" },
         { name: 'Cashier', icon: FiUsers,  page: "/admin/cashier" },
-        { name: 'Product', icon: FiBox },
+        { name: 'Product', icon: FiBox, page: "/admin/product" },
         { name: 'Report', icon: FiTrendingUp, page: "/admin/report" },
         { name: 'App', icon: AiFillAppstore, page: "/" },
         { name: 'Settings', icon: FiSettings },

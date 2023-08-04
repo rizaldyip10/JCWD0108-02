@@ -21,14 +21,11 @@ module.exports = {
         password: hashPassword,
       });
       const payload = { id: result.id };
-
-      const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1h" });
-
       res.status(200).send({
         status: true,
         message: "Add new cashier success",
         result,
-        token,
+        
       });
     } catch (error) {
       res.status(400).send(error);
@@ -75,9 +72,12 @@ module.exports = {
   },
   forgotPassword: async (req, res) => {
     try {
+      console.log(process.env.KEY_JWT);
       const { email } = req.body;
       const result = await cashier.findOne({where: { email: email }});
-      if (result == null) throw { msg: "Account not found" };
+      if (result == null) throw{message:"Account not found"}
+      if (result.isBanned) throw{message:"Account is suspend"}
+      if (result.isDeleted) throw{message:"Account not found"}
       const username = result.username;
       const payload = { id: result.id };
       const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "1h" });
@@ -85,7 +85,7 @@ module.exports = {
       const tempCompile = await handlebars.compile(data);
       const tempResult = tempCompile({ username, token });
       await transporter.sendMail({
-        from: process.env.EMAIL_TRANSPORTER,
+        from: "rifky.rizkita@gmail.com",
         to: email,
         subject: "Reset your password",
         html: tempResult,
@@ -138,10 +138,10 @@ module.exports = {
   getCashiers: async (req,res) => {
     try {
       const page = +req.query.page || 1;
-      const limit = +req.query.limit || 10;
+      const limit = +req.query.limit || 100;
       const search = req.query.search;
       const sort= req.query.sort || "ASC"
-      const condition = {isAdmin:false, isDeleted:false, isBanned:false}
+      const condition = {isAdmin:false, isDeleted:false}
       if (search) condition['username'] = { [Op.like]: `%${search}%` };
       const offset = (page - 1) * limit
       const total = await cashier.count({where: condition})
@@ -157,6 +157,88 @@ module.exports = {
       console.log(error);
       res.status(400).send(error);
     }
-  }
+  },
+  banCashier: async(req,res)=>{
+    try {
+      const id = req.params.id
+        const result = await cashier.findOne(
+          {where:
+            {id:id}
+          }
+        )
+        console.log(req.params.id);
+        console.log(result);
+        if(result.isBanned == false){
+        await cashier.update(
+            {isBanned : true},
+            {where:{id:id}}
+            )
+            res.status(200).send("Success to ban cashier")
+          }
+          if(result.isBanned == true) 
+          {await cashier.update(
+            {isBanned : false},
+            {where:{id:id}}
+            )
+            res.status(200).send("Success to unban cashier")
+          }
+    } catch (error) {
+        res.status(400).send("Failed")
+        console.log(error);
+    }
+},
+  deleteCashier: async(req,res)=>{
+    try {
+      const id = req.params.id
+        const result = await cashier.findOne(
+          {where:
+            {id:id}
+          }
+        )
+        await cashier.update(
+            {isDeleted : true},
+            {where:{id:id}}
+            )
+            res.status(200).send("Cashier has been deleted")
+          
+    } catch (error) {
+        res.status(400).send("Failed")
+        console.log(error);
+    }
+},
+editCashier : async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateFields = {};
 
+    if (req.body.username) {
+      updateFields.username = req.body.username;
+    }
+    if (req.body.email) {
+      updateFields.email = req.body.email;
+    }
+    if (req.body.firstName) {
+      updateFields.firstName = req.body.firstName;
+    }
+    if (req.body.lastName) {
+      updateFields.lastName = req.body.lastName;
+    }
+    if (req.body.phone) {
+      updateFields.phone = req.body.phone;
+    }
+    if (req.body.address) {
+      updateFields.address = req.body.address;
+    }
+
+    const result = await cashier.update(updateFields, {
+      where: { id: id },
+    });
+
+    console.log(updateFields);
+    res.status(200).send({ msg: 'Success to edit cashier' });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error, msg: 'Failed to edit cashier' });
+  }
+}
 };

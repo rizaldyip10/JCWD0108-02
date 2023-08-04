@@ -21,6 +21,7 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 export const AddCashier = ({ onCloseModal }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false); 
+  const token = localStorage.getItem('token')
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -38,12 +39,13 @@ export const AddCashier = ({ onCloseModal }) => {
   const handleSubmit = async (values) => {
     try {
       const response = await Axios.post(
-        "http://localhost:8000/api/users",
+        "http://localhost:8000/api/auth",
         {
           username: values.username,
           password: values.password,
           email: values.email,
-        }
+        },
+        {headers: {authorization: `Bearer ${token}`}}
       );
       console.log(response);
       setIsSuccess(true);    

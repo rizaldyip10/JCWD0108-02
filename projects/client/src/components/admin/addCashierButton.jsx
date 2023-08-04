@@ -15,8 +15,8 @@ export const AddCashierButton = () => {
   };
 
   return (
-    <Flex justifyContent={'flex-end'} >
-      <Button bg={"green"} color={'white'} _hover={{ bg: 'white', color: 'green', boxShadow: 'md' }} onClick={handleOpenModal}> Add Cashier
+    <Flex justifyContent={'flex-end'}  mr={5} >
+      <Button mt={5} bg={"green"} color={'white'} _hover={{ bg: 'white', color: 'green', boxShadow: 'md' }} onClick={handleOpenModal}> Add Cashier
       </Button>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>

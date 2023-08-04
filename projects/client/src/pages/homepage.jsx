@@ -4,7 +4,7 @@ import { Category } from "../components/landingPage/cardCategory";
 import { CartCard } from "../components/landingPage/cartDetail";
 
 import { useEffect, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 
 export const Homepage = ({ searchQuery }) => {
   const [reload, setReload] = useState(true)
@@ -33,7 +33,7 @@ export const Homepage = ({ searchQuery }) => {
                 Category
               </Heading>
               <Flex justifyContent="center">
-                <Category/>
+                <Category selectedCategory={selectedCategory} onSelectCategory={handleCategoryClick}/>
               </Flex>
             </Stack>
           </Box>
@@ -42,7 +42,7 @@ export const Homepage = ({ searchQuery }) => {
               <Heading fontSize={'md'} fontFamily={'body'} fontWeight={500} color={'green'}>
                     Product
               </Heading>
-              <Product reload={reload} setReload={setReload}/>
+              <Product reload={reload} setReload={setReload} selectedCategory={selectedCategory} searchQuery={searchQuery}/>
             </Stack>
           </Box>
         </Box>

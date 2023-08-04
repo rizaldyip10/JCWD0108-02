@@ -9,8 +9,11 @@ router.post("/", verifyToken,checkAddCashier, authControllers.addCashier)
 router.post("/login", checkLogin,authControllers.login)
 router.get("/login",verifyToken,authControllers.keepLogin)
 router.put("/forgotPass", checkForgetPassword,authControllers.forgotPassword);
-router.patch("/forgotPass",verifyToken,checkResetPassword , authControllers.resetPassword);
+router.patch("/forgotPass/",verifyToken,checkResetPassword , authControllers.resetPassword);
 router.post("/profilePicture",verifyToken,multerUpload().single("file"), authControllers.uploadPic)
+router.patch('/:id',authControllers.editCashier)
+router.put('/:id',authControllers.deleteCashier)
+router.delete('/:id',authControllers.banCashier)
 
 
 module.exports= router

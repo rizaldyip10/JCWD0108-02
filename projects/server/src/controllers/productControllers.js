@@ -71,6 +71,7 @@ module.exports = {
             const result = await product.create({productImage, productName, productPrice, productDescription, CategoryId})
             res.status(200).send("Success to add product")
         } catch (error) {
+          console.log(error);
             res.status(400).send({error, msg:"Failed to add product"})
         }
     },

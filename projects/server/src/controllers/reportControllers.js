@@ -20,8 +20,8 @@ module.exports = {
             }
             if (dateStart || dateEnd) {
                 condition.createdAt = {[Op.and]: {
-                    [Op.gte]: new Date(dateStart).setHours(-17,0,0,0),
-                    [Op.lte]: new Date(dateEnd).setHours(6,59,59,599)
+                    [Op.gte]: new Date(dateStart).setHours(7,0,0,0),
+                    [Op.lte]: new Date(dateEnd).setHours(30,59,59,599)
                 }}}
 
             const result = await Transaction.findAll({
@@ -89,7 +89,6 @@ module.exports = {
             })
 
             const result = todayIncome - yesterdayIncome
-            console.log(yesterdayIncome);
             res.status(200).send(result.toString())
         } catch (error) {
             res.status(400).send(error)
@@ -129,7 +128,7 @@ module.exports = {
                     model: transactionDetail,
                     include: {
                       model: Product
-                    }}]
+                    }}],
               })
           
               const productSalesCount = {}
@@ -137,10 +136,10 @@ module.exports = {
               allTransactions.forEach((transaction) => {
                 transaction.transactionDetails.forEach((detail) => {
                   const { Product, totalItems } = detail;
-                  if (productSalesCount[Product.productName]) {
-                    productSalesCount[Product.productName] += totalItems;
+                  if (productSalesCount[Product?.productName]) {
+                    productSalesCount[Product?.productName] += totalItems;
                   } else {
-                    productSalesCount[Product.productName] = totalItems;
+                    productSalesCount[Product?.productName] = totalItems;
                   }})
               })
           
@@ -150,9 +149,12 @@ module.exports = {
               }))
           
               productSalesArray.sort((a, b) => b.salesCount - a.salesCount)
+
+              const top5Products = productSalesArray.slice(0, 5);
           
-              res.status(200).send(productSalesArray)
+              res.status(200).send(top5Products)
         } catch (error) {
+            console.log(error);
             res.status(400).send(error)
         }
     },

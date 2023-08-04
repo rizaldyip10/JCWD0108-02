@@ -61,7 +61,7 @@ export const UsernameLogin = ({ handleSubmit }) => {
               <Text as={Link} href="http://localhost:3000/forgotpass" color="blue.400">
                 Forgot Password?
               </Text>
-              <Button colorScheme="green" isLoading={props.isSubmitting} isDisabled={!props.dirty || !props.isValid} type="submit">
+              <Button colorScheme="green"  isDisabled={!props.dirty || !props.isValid} type="submit">
                 Login
               </Button>
             </VStack>
